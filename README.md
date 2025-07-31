@@ -126,7 +126,7 @@ Users can switch themes using the theme selector in the header.
 - **Build Calculator**: Interactive PC component selector
 - **Theme Switching**: Choose from 3 different themes
 
-## 🔧 Admin Features
+## Admin Features
 
 - **Dashboard**: System statistics and monitoring
 - **Product Management**: Add, edit, delete products
@@ -142,7 +142,7 @@ The website includes comprehensive help documentation:
 - **How to Buy**: Component selection guide
 - **Wiki**: General help and resources
 
-## 🛠️ Technical Details
+## Technical Details
 
 ### Technologies Used
 - **Backend**: PHP 7.4+
@@ -170,7 +170,7 @@ The project is hosted on myweb.cs.uwindsor.ca:
 - **URL**: https://myweb.cs.uwindsor.ca/~hassan95/3340-project/
 - **Admin Login**: Use the admin account created in database_setup.sql
 
-## 📄 License
+## License
 
 This project is created for educational purposes as part of a university course assignment.
 
