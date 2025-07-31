@@ -167,7 +167,7 @@ The website includes comprehensive help documentation:
 ## Live Demo
 
 The project is hosted on myweb.cs.uwindsor.ca:
-- **URL**: https://myweb.cs.uwindsor.ca/~hassan95/3340-project/
+- **URL**: [https://myweb.cs.uwindsor.ca/~hassan95/3340-project/](https://hassan95.myweb.cs.uwindsor.ca/3340-project/)
 - **Admin Login**: Use the admin account created in database_setup.sql
 
 ## License
