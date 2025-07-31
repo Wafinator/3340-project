@@ -2,7 +2,7 @@
 
 A dynamic e-commerce website for computer parts and custom PC building, built with PHP, MySQL, HTML5, CSS3, and JavaScript.
 
-## 🌟 Features
+## Features
 
 ### Frontend Client Interface
 - **Interactive Functionality**: Full interactive features using HTML5, CSS, JavaScript
@@ -24,7 +24,7 @@ A dynamic e-commerce website for computer parts and custom PC building, built wi
 - **Contact Forms**: Interactive forms with validation
 - **Order Management**: Complete order tracking system
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 3340-project/
@@ -68,7 +68,7 @@ A dynamic e-commerce website for computer parts and custom PC building, built wi
 └── installation_guide.md # Detailed installation guide
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - PHP 7.4 or higher
@@ -108,7 +108,7 @@ A dynamic e-commerce website for computer parts and custom PC building, built wi
    - Visit your website URL
    - Run the database checker: `your-domain.com/check-database.php`
 
-## 🎨 Themes
+## Themes
 
 The website includes three different themes:
 
@@ -118,7 +118,7 @@ The website includes three different themes:
 
 Users can switch themes using the theme selector in the header.
 
-## 👤 User Features
+## User Features
 
 - **Registration/Login**: Secure user authentication
 - **Profile Management**: Update email and password
@@ -126,14 +126,14 @@ Users can switch themes using the theme selector in the header.
 - **Build Calculator**: Interactive PC component selector
 - **Theme Switching**: Choose from 3 different themes
 
-## 🔧 Admin Features
+## Admin Features
 
 - **Dashboard**: System statistics and monitoring
 - **Product Management**: Add, edit, delete products
 - **User Management**: Manage user accounts
 - **System Settings**: Configure site settings
 
-## 📚 Documentation
+## Documentation
 
 The website includes comprehensive help documentation:
 
@@ -142,7 +142,7 @@ The website includes comprehensive help documentation:
 - **How to Buy**: Component selection guide
 - **Wiki**: General help and resources
 
-## 🛠️ Technical Details
+## Technical Details
 
 ### Technologies Used
 - **Backend**: PHP 7.4+
@@ -164,43 +164,19 @@ The website includes comprehensive help documentation:
 - **Security**: Password hashing, SQL injection prevention
 - **Performance**: Optimized queries and caching
 
-## 📝 Requirements Met
-
-This project satisfies all course requirements:
-
-✅ **Frontend Client Interface** - Full interactive functionality  
-✅ **Multimedia** - Images, videos, interactive maps, menus  
-✅ **Dynamic Pages** - 20+ unique dynamic pages, 5+ static pages  
-✅ **User Authentication** - Registration, login, profiles  
-✅ **SEO Features** - Meta tags, descriptions, keywords  
-✅ **Responsive Design** - Works on desktop and mobile  
-✅ **End User Documentation** - Comprehensive help wiki  
-✅ **Admin Interface** - Theme switching, data editing, user management  
-✅ **Backend Monitoring** - System status monitoring  
-✅ **Database** - 20+ product records in MySQL  
-✅ **PHP Functionality** - Dynamic web pages  
-✅ **Installation Documentation** - Complete setup guide  
-
-## 🔗 Live Demo
+## Live Demo
 
 The project is hosted on myweb.cs.uwindsor.ca:
 - **URL**: https://myweb.cs.uwindsor.ca/~hassan95/3340-project/
 - **Admin Login**: Use the admin account created in database_setup.sql
 
-## 📞 Support
-
-For questions or issues:
-- Check the help wiki at `/wiki/`
-- Review the installation guide
-- Contact: info@wafitechparts.com
-
-## 📄 License
+## License
 
 This project is created for educational purposes as part of a university course assignment.
 
 ---
 
-**Created by**: Ahmed Hassan  
+**Created by**: Wafi Hassan  
 **Course**: COMP-3340 Web Technologies  
 **Institution**: University of Windsor  
-**Date**: July 2024 
+**Date**: July 2025 
