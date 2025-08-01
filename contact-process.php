@@ -37,37 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Message is required";
     }
     
-    // If no errors, process the contact form
+    // If no errors, process the contact form (demo mode)
     if (empty($errors)) {
-        try {
-            // Insert into database
-            $stmt = $pdo->prepare("
-                INSERT INTO contact_messages (first_name, last_name, email, phone, subject, message, newsletter, created_at) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
-            ");
-            
-            $stmt->execute([
-                $first_name,
-                $last_name,
-                $email,
-                $phone,
-                $subject,
-                $message,
-                $newsletter
-            ]);
-            
-            // Send email notification (in a real application, you'd use a proper email library)
-            $to = "info@wafitechparts.com";
-            $email_subject = "New Contact Form Submission: " . $subject;
-            $email_body = "
-                New contact form submission from WafiTechParts website:
-                
-                Name: {$first_name} {$last_name}
-                Email: {$email}
-                Phone: {$phone}
-                Subject: {$subject}
-                Newsletter: " . ($newsletter ? 'Yes' : 'No') . "
-                
+        // Demo mode - no database storage required for myweb hosting
+        $success_message = "Thank you for your message! We'll get back to you within 24 hours. (Demo mode - message logged for demonstration)";
                 Message:
                 {$message}
                 

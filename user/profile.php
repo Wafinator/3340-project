@@ -8,10 +8,21 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// Get user data
-$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
-$stmt->execute([$_SESSION['user_id']]);
-$user = $stmt->fetch();
+// Demo user information for myweb hosting
+$user = [
+    'id' => $_SESSION['user_id'] ?? 1,
+    'username' => $_SESSION['username'] ?? 'demo_user',
+    'email' => 'demo@wafitechparts.com',
+    'first_name' => 'Demo',
+    'last_name' => 'User',
+    'phone' => '(555) 123-4567',
+    'address' => '123 Tech Street',
+    'city' => 'Windsor',
+    'province' => 'Ontario',
+    'postal_code' => 'N9B 1A1',
+    'created_at' => '2024-01-01',
+    'theme_preference' => 'dark'
+];
 
 // Get user's orders (with error handling for missing tables)
 $orders = [];

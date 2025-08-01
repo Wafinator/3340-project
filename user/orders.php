@@ -13,21 +13,36 @@ $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $per_page = 10;
 $offset = ($page - 1) * $per_page;
 
-$stmt = $pdo->query("SELECT COUNT(*) as total FROM orders WHERE user_id = " . $_SESSION['user_id']);
-$total_orders = $stmt->fetch()['total'];
+// Demo order data for myweb hosting
+$total_orders = 3;
 $total_pages = ceil($total_orders / $per_page);
 
-$stmt = $pdo->prepare("
-    SELECT o.*, COUNT(oi.id) as item_count, SUM(oi.quantity * oi.price) as total_amount 
-    FROM orders o 
-    LEFT JOIN order_items oi ON o.id = oi.order_id 
-    WHERE o.user_id = ? 
-    GROUP BY o.id 
-    ORDER BY o.created_at DESC 
-    LIMIT ? OFFSET ?
-");
-$stmt->execute([$_SESSION['user_id'], $per_page, $offset]);
-$orders = $stmt->fetchAll();
+$orders = [
+    [
+        'id' => 1001,
+        'total_amount' => 1299.99,
+        'status' => 'Delivered',
+        'created_at' => '2024-01-15 10:30:00',
+        'item_count' => 4,
+        'tracking_number' => 'WTP1001234567'
+    ],
+    [
+        'id' => 1002,
+        'total_amount' => 459.98,
+        'status' => 'Shipped',
+        'created_at' => '2024-01-22 14:15:00',
+        'item_count' => 2,
+        'tracking_number' => 'WTP1002345678'
+    ],
+    [
+        'id' => 1003,
+        'total_amount' => 89.99,
+        'status' => 'Processing',
+        'created_at' => '2024-01-30 09:45:00',
+        'item_count' => 1,
+        'tracking_number' => null
+    ]
+];
 
 $page_title = "My Orders";
 include '../includes/header.php';

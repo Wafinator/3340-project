@@ -1,6 +1,3 @@
-# Ignore sensitive configuration files
-includes/config.php
-
 # Ignore common development files
 *.log
 *.tmp
@@ -13,6 +10,4 @@ Thumbs.db
 *.swp
 *.swo
 
-# Ignore local environment files
-.env
-.env.local
+# Note: No database config needed for myweb hosting demo
