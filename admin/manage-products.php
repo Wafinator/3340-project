@@ -8,13 +8,31 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['is_admin'])) {
     exit;
 }
 
-// Demo mode - product actions simulation for myweb hosting
+// Handle product actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     
     switch ($action) {
         case 'add':
-            $success_message = "Product added successfully! (Demo mode - not permanently saved)";
+            $name = trim($_POST['name'] ?? '');
+            $description = trim($_POST['description'] ?? '');
+            $price = floatval($_POST['price'] ?? 0);
+            $category = trim($_POST['category'] ?? '');
+            $subcategory = trim($_POST['subcategory'] ?? '');
+            $brand = trim($_POST['brand'] ?? '');
+            $stock_quantity = intval($_POST['stock_quantity'] ?? 0);
+            $featured = isset($_POST['featured']) ? 1 : 0;
+            
+            if (!empty($name) && $price > 0 && !empty($category)) {
+                $stmt = $pdo->prepare("
+                    INSERT INTO products (name, description, price, category, subcategory, brand, stock_quantity, featured) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                ");
+                $stmt->execute([$name, $description, $price, $category, $subcategory, $brand, $stock_quantity, $featured]);
+                $success_message = "Product added successfully!";
+            } else {
+                $error_message = "Please fill in all required fields.";
+            }
             break;
             
         case 'update':
@@ -28,11 +46,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stock_quantity = intval($_POST['stock_quantity'] ?? 0);
             $featured = isset($_POST['featured']) ? 1 : 0;
             
-            $success_message = "Product updated successfully! (Demo mode - not permanently saved)";
+            if ($id > 0 && !empty($name) && $price > 0 && !empty($category)) {
+                $stmt = $pdo->prepare("
+                    UPDATE products SET name = ?, description = ?, price = ?, category = ?, 
+                           subcategory = ?, brand = ?, stock_quantity = ?, featured = ?
+                    WHERE id = ?
+                ");
+                $stmt->execute([$name, $description, $price, $category, $subcategory, $brand, $stock_quantity, $featured, $id]);
+                $success_message = "Product updated successfully!";
+            } else {
+                $error_message = "Please fill in all required fields.";
+            }
             break;
             
         case 'delete':
-            $success_message = "Product deleted successfully! (Demo mode)";
+            $id = intval($_POST['id'] ?? 0);
+            if ($id > 0) {
+                $stmt = $pdo->prepare("DELETE FROM products WHERE id = ?");
+                $stmt->execute([$id]);
+                $success_message = "Product deleted successfully!";
+            }
             break;
     }
 }

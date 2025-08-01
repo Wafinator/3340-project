@@ -23,8 +23,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $current_password = $_POST['current_password'] ?? '';
             $new_password = $_POST['new_password'] ?? '';
             
-            // Demo mode - simulate profile update for myweb hosting
-            $_SESSION['admin_message'] = "Admin profile updated successfully! (Demo mode - not permanently saved)";
+            // Validate current password
+            $stmt = $pdo->prepare("SELECT password_hash FROM users WHERE id = ?");
+            $stmt->execute([$_SESSION['user_id']]);
+            $user = $stmt->fetch();
+            
+            if (!password_verify($current_password, $user['password_hash'])) {
+                $_SESSION['admin_error'] = "Current password is incorrect.";
+            } else {
+                // Update email if provided
+                if (!empty($new_email)) {
+                    $stmt = $pdo->prepare("UPDATE users SET email = ? WHERE id = ?");
+                    $stmt->execute([$new_email, $_SESSION['user_id']]);
+                }
+                
+                // Update password if provided
+                if (!empty($new_password)) {
+                    $new_hash = password_hash($new_password, PASSWORD_DEFAULT);
+                    $stmt = $pdo->prepare("UPDATE users SET password_hash = ? WHERE id = ?");
+                    $stmt->execute([$new_hash, $_SESSION['user_id']]);
+                }
+                
+                $_SESSION['admin_message'] = "Admin profile updated successfully.";
+            }
             break;
             
         case 'clear_cache':
