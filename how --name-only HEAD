@@ -1,5 +1,0 @@
-[33md9ce023[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m ENHANCEMENT: Apply modern theme to product detail page
-[33m0699106[m ENHANCEMENT: Apply modern glassmorphism theme across all pages
-[33mdc9b658[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge branch 'main' of https://github.com/Wafinator/3340-project
-[33m8f90acb[m SECURITY FIX: Remove exposed database credentials and implement secure config system
-[33m2982c7b[m Update README.md
