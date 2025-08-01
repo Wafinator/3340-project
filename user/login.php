@@ -1,6 +1,7 @@
 <?php
 session_start();
 $page_title = "Login";
+require_once '../includes/db.php';
 
 $error_message = '';
 
@@ -11,18 +12,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($username) || empty($password)) {
         $error_message = "Please enter both username and password.";
     } else {
-        // Demo login - accept any username/password for demonstration
-        $_SESSION['user_id'] = 1;
-        $_SESSION['username'] = $username;
-        $_SESSION['is_admin'] = ($username === 'admin') ? 1 : 0;
-        
-        // Redirect to admin dashboard if admin, otherwise to home
-        if ($_SESSION['is_admin']) {
-            header("Location: ../admin/dashboard.php");
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+        $stmt->execute([$username]);
+        $user = $stmt->fetch();
+
+        if ($user && password_verify($password, $user['password_hash'])) {
+            // Successful login
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['is_admin'] = $user['is_admin'] ?? 0;
+            
+            // Redirect to admin dashboard if admin, otherwise to home
+            if ($user['is_admin']) {
+                header("Location: ../admin/dashboard.php");
+            } else {
+                header("Location: ../index.php");
+            }
+            exit;
         } else {
-            header("Location: ../index.php");
+            $error_message = "Invalid username or password.";
         }
-        exit;
     }
 }
 

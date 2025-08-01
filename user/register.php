@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once '../includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
@@ -39,18 +40,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "You must agree to the Terms of Service and Privacy Policy.";
     }
 
-    // Demo registration - skip database checks for myweb hosting
+    // Check for existing username and email
     if (empty($errors)) {
-        // Auto-login the new user for demo
-        $_SESSION['user_id'] = rand(1, 1000);
-        $_SESSION['username'] = $username;
-        $_SESSION['is_admin'] = 0;
+        try {
+            // Check if username already exists
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = ?");
+            $stmt->execute([$username]);
 
-        // Success message
-        $_SESSION['success_message'] = "Welcome to WafiTechParts! Your account has been created successfully.";
+            if ($stmt->fetchColumn() > 0) {
+                $errors[] = "Username already taken. Please choose another.";
+            }
 
-        header("Location: ../index.php");
-        exit;
+            // Check if email already exists
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
+            $stmt->execute([$email]);
+
+            if ($stmt->fetchColumn() > 0) {
+                $errors[] = "Email already registered. Please use a different one.";
+            }
+
+        } catch (PDOException $e) {
+            $errors[] = "Database error. Please try again later.";
+        }
+    }
+
+    // If no errors, create the user
+    if (empty($errors)) {
+        try {
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $pdo->prepare("
+                INSERT INTO users (username, email, password_hash) 
+                VALUES (?, ?, ?)
+            ");
+            $stmt->execute([$username, $email, $hash]);
+
+            // Auto-login the new user
+            $user_id = $pdo->lastInsertId();
+            $_SESSION['user_id'] = $user_id;
+            $_SESSION['username'] = $username;
+            $_SESSION['is_admin'] = 0;
+
+            // Success message
+            $_SESSION['success_message'] = "Welcome to WafiTechParts! Your account has been created successfully.";
+
+            header("Location: ../index.php");
+            exit;
+        } catch (PDOException $e) {
+            $errors[] = "Registration failed. Please try again later.";
+        }
     }
 
     // If there are errors, store them in session and redirect back

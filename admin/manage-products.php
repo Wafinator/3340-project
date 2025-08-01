@@ -42,13 +42,14 @@ $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $per_page = 10;
 $offset = ($page - 1) * $per_page;
 
-// Demo products data for myweb hosting
-require_once '../includes/db.php';
-$total_products = count($products);
+// Get total number of products for pagination
+$stmt = $pdo->query("SELECT COUNT(*) as total FROM products");
+$total_products = $stmt->fetch()['total'];
 $total_pages = ceil($total_products / $per_page);
 
-// Paginate demo products
-$demo_products = array_slice($products, $offset, $per_page);
+$stmt = $pdo->prepare("SELECT * FROM products ORDER BY created_at DESC LIMIT ? OFFSET ?");
+$stmt->execute([$per_page, $offset]);
+$products = $stmt->fetchAll();
 
 $page_title = "Manage Products";
 include '../includes/header.php';
@@ -167,7 +168,7 @@ include '../includes/header.php';
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($demo_products as $product): ?>
+                                <?php foreach ($products as $product): ?>
                                 <tr>
                                     <td><?php echo $product['id']; ?></td>
                                     <td>

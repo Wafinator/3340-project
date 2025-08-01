@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once 'includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Sanitize and validate input
@@ -36,14 +37,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Message is required";
     }
     
-    // If no errors, process the contact form (demo mode)
+    // If no errors, process the contact form
     if (empty($errors)) {
-        // Demo mode - no database storage required for myweb hosting
-        $_SESSION['contact_success'] = "Thank you for your message! We'll get back to you within 24 hours. (Demo mode - message logged for demonstration)";
-        
-        // Redirect back to contact page
-        header("Location: contact.php");
-        exit;
+        try {
+            // Insert into database
+            $stmt = $pdo->prepare("
+                INSERT INTO contact_messages (first_name, last_name, email, phone, subject, message, newsletter, created_at) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
+            ");
+            
+            $stmt->execute([
+                $first_name,
+                $last_name,
+                $email,
+                $phone,
+                $subject,
+                $message,
+                $newsletter
+            ]);
+            
+            $_SESSION['contact_success'] = "Thank you for your message! We'll get back to you within 24 hours.";
+            
+            // Redirect back to contact page
+            header("Location: contact.php");
+            exit;
+            
+        } catch (PDOException $e) {
+            $errors[] = "Database error: " . $e->getMessage();
+        }
     }
     
     // If there were errors, store them in session and redirect

@@ -11,14 +11,10 @@ if (!$product_id) {
     exit;
 }
 
-// Get product details from static data
-$product = null;
-foreach ($products as $p) {
-    if ($p['id'] == $product_id) {
-        $product = $p;
-        break;
-    }
-}
+// Get product details
+$stmt = $pdo->prepare("SELECT * FROM products WHERE id = ?");
+$stmt->execute([$product_id]);
+$product = $stmt->fetch();
 
 if (!$product) {
     header("Location: index.php");
@@ -26,10 +22,9 @@ if (!$product) {
 }
 
 // Get related products (same category, different product)
-$related_products = array_filter($products, function($p) use ($product, $product_id) {
-    return $p['category'] == $product['category'] && $p['id'] != $product_id;
-});
-$related_products = array_slice(array_values($related_products), 0, 4);
+$stmt = $pdo->prepare("SELECT * FROM products WHERE category = ? AND id != ? LIMIT 4");
+$stmt->execute([$product['category'], $product_id]);
+$related_products = $stmt->fetchAll();
 
 $page_title = $product['name'] . " - Product Details";
 ?>

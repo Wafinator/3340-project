@@ -43,12 +43,10 @@ include 'includes/header.php';
         <h2>Featured Products</h2>
         <div class="product-grid">
             <?php
-            // Get featured products from static data
+            // Get featured products from database
             require_once 'includes/db.php';
-            $featured_products = array_filter($products, function($product) {
-                return $product['featured'] == 1;
-            });
-            $featured_products = array_slice($featured_products, 0, 6);
+            $stmt = $pdo->query("SELECT * FROM products WHERE featured = 1 LIMIT 6");
+            $featured_products = $stmt->fetchAll();
             
             foreach ($featured_products as $product):
             ?>

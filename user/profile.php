@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once '../includes/db.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -7,28 +8,34 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// Demo user information for myweb hosting
-$user = [
-    'id' => $_SESSION['user_id'] ?? 1,
-    'username' => $_SESSION['username'] ?? 'demo_user',
-    'email' => 'demo@wafitechparts.com',
-    'first_name' => 'Demo',
-    'last_name' => 'User',
-    'phone' => '(555) 123-4567',
-    'address' => '123 Tech Street',
-    'city' => 'Windsor',
-    'province' => 'Ontario',
-    'postal_code' => 'N9B 1A1',
-    'created_at' => '2024-01-01',
-    'theme_preference' => 'dark'
-];
+// Get user data from database
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+$stmt->execute([$_SESSION['user_id']]);
+$user = $stmt->fetch();
 
-// Demo orders for myweb hosting
-$orders = [
-    ['id' => 1001, 'total_amount' => 1299.99, 'status' => 'Delivered', 'created_at' => '2024-01-15', 'item_count' => 4],
-    ['id' => 1002, 'total_amount' => 459.98, 'status' => 'Shipped', 'created_at' => '2024-01-22', 'item_count' => 2],
-    ['id' => 1003, 'total_amount' => 89.99, 'status' => 'Processing', 'created_at' => '2024-01-30', 'item_count' => 1]
-];
+if (!$user) {
+    header("Location: login.php");
+    exit;
+}
+
+// Get user's orders (with error handling for missing tables)
+$orders = [];
+try {
+    $stmt = $pdo->prepare("
+        SELECT o.*, COUNT(oi.id) as item_count 
+        FROM orders o 
+        LEFT JOIN order_items oi ON o.id = oi.order_id 
+        WHERE o.user_id = ? 
+        GROUP BY o.id 
+        ORDER BY o.created_at DESC 
+        LIMIT 5
+    ");
+    $stmt->execute([$_SESSION['user_id']]);
+    $orders = $stmt->fetchAll();
+} catch (PDOException $e) {
+    // Orders table might not exist yet
+    $orders = [];
+}
 
 // Handle profile updates
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -61,7 +68,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
         if (empty($errors)) {
-            $success_message = "Profile updated successfully! (Demo mode - changes not permanently stored)";
+            try {
+                $updates = [];
+                $params = [];
+                
+                if (!empty($email)) {
+                    $updates[] = "email = ?";
+                    $params[] = $email;
+                }
+                
+                if (!empty($new_password)) {
+                    $updates[] = "password_hash = ?";
+                    $params[] = password_hash($new_password, PASSWORD_DEFAULT);
+                }
+                
+                if (!empty($updates)) {
+                    $params[] = $_SESSION['user_id'];
+                    $stmt = $pdo->prepare("UPDATE users SET " . implode(", ", $updates) . " WHERE id = ?");
+                    $stmt->execute($params);
+                    $success_message = "Profile updated successfully!";
+                    
+                    // Update session email if changed
+                    if (!empty($email)) {
+                        $_SESSION['email'] = $email;
+                    }
+                } else {
+                    $success_message = "No changes were made to your profile.";
+                }
+            } catch (PDOException $e) {
+                $errors[] = "Database error: " . $e->getMessage();
+            }
         }
     }
 }

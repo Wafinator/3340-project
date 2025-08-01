@@ -1,6 +1,6 @@
 <?php
 session_start();
-// Static data for myweb hosting
+require_once '../includes/db.php';
 
 // Check if user is logged in and is admin
 if (!isset($_SESSION['user_id']) || empty($_SESSION['is_admin'])) {
@@ -38,13 +38,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Get current admin user data
-// Demo admin user details for myweb hosting
-$admin_user = [
-    'id' => $_SESSION['user_id'] ?? 1,
-    'username' => $_SESSION['username'] ?? 'admin',
-    'email' => 'admin@wafitechparts.com',
-    'created_at' => '2024-01-01'
-];
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+$stmt->execute([$_SESSION['user_id']]);
+$admin_user = $stmt->fetch();
 
 $page_title = "Admin Settings";
 include '../includes/header.php';
@@ -147,7 +143,7 @@ include '../includes/header.php';
                         
                         <div class="info-item">
                             <strong>MySQL Version:</strong>
-                            <span>Demo Mode 1.0 (myweb hosting)</span>
+                            <span><?php echo $pdo->query('SELECT VERSION()')->fetchColumn(); ?></span>
                         </div>
                         
                         <div class="info-item">
@@ -186,9 +182,8 @@ include '../includes/header.php';
                         $status = [];
                         
                         foreach ($tables as $table) {
-                                                // Demo table counts for myweb hosting
-                    $counts = ['users' => 42, 'products' => 6, 'orders' => 18, 'contact_messages' => 5];
-                    $count = $counts[$table] ?? 0;
+                            $stmt = $pdo->query("SELECT COUNT(*) FROM $table");
+                            $count = $stmt->fetchColumn();
                             $status[$table] = $count;
                         }
                     ?>

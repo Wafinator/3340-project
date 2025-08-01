@@ -11,49 +11,51 @@ $price_max = $_GET['price_max'] ?? '';
 $search = $_GET['search'] ?? '';
 $sort = $_GET['sort'] ?? 'name';
 
-// Filter products using static data
-$filtered_products = $products;
+// Build the SQL query with filters
+$sql = "SELECT * FROM products WHERE 1=1";
+$params = [];
 
 if ($category_filter) {
-    $filtered_products = array_filter($filtered_products, function($product) use ($category_filter) {
-        return $product['category'] == $category_filter;
-    });
+    $sql .= " AND category = ?";
+    $params[] = $category_filter;
 }
 
 if ($price_min !== '') {
-    $filtered_products = array_filter($filtered_products, function($product) use ($price_min) {
-        return $product['price'] >= floatval($price_min);
-    });
+    $sql .= " AND price >= ?";
+    $params[] = $price_min;
 }
 
 if ($price_max !== '') {
-    $filtered_products = array_filter($filtered_products, function($product) use ($price_max) {
-        return $product['price'] <= floatval($price_max);
-    });
+    $sql .= " AND price <= ?";
+    $params[] = $price_max;
 }
 
 if ($search) {
-    $filtered_products = array_filter($filtered_products, function($product) use ($search) {
-        return stripos($product['name'], $search) !== false || 
-               stripos($product['description'], $search) !== false;
-    });
+    $sql .= " AND (name LIKE ? OR description LIKE ?)";
+    $search_term = "%$search%";
+    $params[] = $search_term;
+    $params[] = $search_term;
 }
 
-// Sort products
+// Add sorting
 switch ($sort) {
     case 'price_low':
-        usort($filtered_products, function($a, $b) { return $a['price'] <=> $b['price']; });
+        $sql .= " ORDER BY price ASC";
         break;
     case 'price_high':
-        usort($filtered_products, function($a, $b) { return $b['price'] <=> $a['price']; });
+        $sql .= " ORDER BY price DESC";
         break;
     case 'brand':
     default:
-        usort($filtered_products, function($a, $b) { return strcmp($a['name'], $b['name']); });
-        break;
+        $sql .= " ORDER BY name ASC";
 }
 
-$products = array_values($filtered_products);
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
+$products = $stmt->fetchAll();
+
+// Get unique categories for filters
+$categories = $pdo->query("SELECT DISTINCT category FROM products ORDER BY category")->fetchAll();
 ?>
 
 <div class="container">
