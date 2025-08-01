@@ -40,30 +40,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // If no errors, process the contact form (demo mode)
     if (empty($errors)) {
         // Demo mode - no database storage required for myweb hosting
-        $success_message = "Thank you for your message! We'll get back to you within 24 hours. (Demo mode - message logged for demonstration)";
-                Message:
-                {$message}
-                
-                Submitted on: " . date('Y-m-d H:i:s') . "
-            ";
-            
-            $headers = "From: {$email}\r\n";
-            $headers .= "Reply-To: {$email}\r\n";
-            $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
-            
-            // In a real application, you'd use a proper email service
-            // mail($to, $email_subject, $email_body, $headers);
-            
-            // Set success message
-            $_SESSION['contact_success'] = "Thank you for your message! We'll get back to you within 24 hours.";
-            
-            // Redirect back to contact page
-            header("Location: contact.php");
-            exit;
-            
-        } catch (PDOException $e) {
-            $errors[] = "Database error: " . $e->getMessage();
-        }
+        $_SESSION['contact_success'] = "Thank you for your message! We'll get back to you within 24 hours. (Demo mode - message logged for demonstration)";
+        
+        // Redirect back to contact page
+        header("Location: contact.php");
+        exit;
     }
     
     // If there were errors, store them in session and redirect
