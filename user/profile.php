@@ -61,21 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
         if (empty($errors)) {
-            try {
-                $updates = [];
-                $params = [];
-                
-                if (!empty($email)) {
-                    $updates[] = "email = ?";
-                    $params[] = $email;
-                }
-                
-                if (!empty($new_password)) {
-                    $updates[] = "password_hash = ?";
-                    $params[] = password_hash($new_password, PASSWORD_DEFAULT);
-                }
-                
-                $success_message = "Profile updated successfully! (Demo mode - changes not permanently stored)";
+            $success_message = "Profile updated successfully! (Demo mode - changes not permanently stored)";
         }
     }
 }

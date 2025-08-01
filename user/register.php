@@ -44,17 +44,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Auto-login the new user for demo
         $_SESSION['user_id'] = rand(1, 1000);
         $_SESSION['username'] = $username;
-            $_SESSION['is_admin'] = 0;
+        $_SESSION['is_admin'] = 0;
 
-            // Success message
-            $_SESSION['success_message'] = "Welcome to WafiTechParts! Your account has been created successfully.";
+        // Success message
+        $_SESSION['success_message'] = "Welcome to WafiTechParts! Your account has been created successfully.";
 
-            header("Location: ../index.php");
-            exit;
-
-        } catch (PDOException $e) {
-            $errors[] = "Registration failed. Please try again later.";
-        }
+        header("Location: ../index.php");
+        exit;
     }
 
     // If there are errors, store them in session and redirect back
