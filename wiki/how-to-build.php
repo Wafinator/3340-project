@@ -354,13 +354,37 @@ include '../includes/header.php';
 <style>
 .build-hero {
     text-align: center;
-    padding: 60px 0;
+    padding: 80px 0;
+    background: linear-gradient(135deg, rgba(100, 181, 246, 0.1), rgba(25, 118, 210, 0.1));
+    border-radius: 15px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.build-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(100, 181, 246, 0.1), transparent 70%);
+    pointer-events: none;
+}
+
+.build-hero h1 {
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 0 20px rgba(100, 181, 246, 0.5);
 }
 
 .build-subtitle {
     font-size: 1.3em;
     margin: 20px 0;
     color: #ccc;
+    position: relative;
+    z-index: 1;
 }
 
 .build-content {

@@ -226,17 +226,41 @@ include '../includes/header.php';
 </div>
 
 <style>
-/* Profile Page - Consistent with main site styling */
+/* Profile Page - Enhanced Modern Theme */
 
 .profile-hero {
     text-align: center;
-    padding: 60px 0;
+    padding: 80px 0;
+    background: linear-gradient(135deg, rgba(100, 181, 246, 0.1), rgba(25, 118, 210, 0.1));
+    border-radius: 15px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(100, 181, 246, 0.1), transparent 70%);
+    pointer-events: none;
+}
+
+.profile-hero h1 {
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 0 20px rgba(100, 181, 246, 0.5);
 }
 
 .profile-subtitle {
     font-size: 1.3em;
     margin: 20px 0 30px;
     color: #ccc;
+    position: relative;
+    z-index: 1;
 }
 
 .profile-content {
@@ -251,20 +275,48 @@ include '../includes/header.php';
 }
 
 .profile-sidebar {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     padding: 30px;
     height: fit-content;
+    transition: all 0.3s ease;
+}
+
+.profile-sidebar:hover {
+    box-shadow: 0 15px 50px rgba(100, 181, 246, 0.1);
 }
 
 .user-info {
     text-align: center;
     padding: 30px 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
     margin-bottom: 30px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.user-info::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #64b5f6, #1976d2, #64b5f6);
+    opacity: 0.8;
+}
+
+.user-info:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(100, 181, 246, 0.2);
 }
 
 .user-avatar {

@@ -151,13 +151,37 @@ include '../includes/header.php';
 <style>
 .orders-hero {
     text-align: center;
-    padding: 60px 0;
+    padding: 80px 0;
+    background: linear-gradient(135deg, rgba(100, 181, 246, 0.1), rgba(25, 118, 210, 0.1));
+    border-radius: 15px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.orders-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(100, 181, 246, 0.1), transparent 70%);
+    pointer-events: none;
+}
+
+.orders-hero h1 {
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 0 20px rgba(100, 181, 246, 0.5);
 }
 
 .orders-subtitle {
     font-size: 1.3em;
     margin: 20px 0;
     color: #ccc;
+    position: relative;
+    z-index: 1;
 }
 
 .orders-content {
@@ -169,9 +193,30 @@ include '../includes/header.php';
 .empty-state {
     text-align: center;
     padding: 60px 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.empty-state::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #64b5f6, #1976d2, #64b5f6);
+    opacity: 0.8;
+}
+
+.empty-state:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 50px rgba(100, 181, 246, 0.2);
 }
 
 .empty-icon {

@@ -231,17 +231,41 @@ include '../includes/header.php';
 </div>
 
 <style>
-/* Build Calculator - Consistent with main site styling */
+/* Build Calculator - Enhanced Modern Theme */
 
 .calculator-hero {
     text-align: center;
-    padding: 60px 0;
+    padding: 80px 0;
+    background: linear-gradient(135deg, rgba(100, 181, 246, 0.1), rgba(25, 118, 210, 0.1));
+    border-radius: 15px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.calculator-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(100, 181, 246, 0.1), transparent 70%);
+    pointer-events: none;
+}
+
+.calculator-hero h1 {
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 0 20px rgba(100, 181, 246, 0.5);
 }
 
 .calculator-subtitle {
     font-size: 1.3em;
     margin: 20px 0;
     color: #ccc;
+    position: relative;
+    z-index: 1;
 }
 
 .calculator-content {
@@ -254,9 +278,24 @@ include '../includes/header.php';
     max-width: 800px;
     margin: 0 auto;
     padding: 40px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.calculator-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #64b5f6, #1976d2, #64b5f6);
+    opacity: 0.8;
 }
 
 .calculator-form h2 {
@@ -268,16 +307,36 @@ include '../includes/header.php';
 
 .component-section {
     margin-bottom: 25px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all 0.3s ease;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.component-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #64b5f6, transparent);
+    transition: left 0.4s ease;
 }
 
 .component-section:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(100, 181, 246, 0.3);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(100, 181, 246, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(100, 181, 246, 0.15);
+}
+
+.component-section:hover::before {
+    left: 100%;
 }
 
 .component-section h3 {
@@ -393,26 +452,43 @@ include '../includes/header.php';
     justify-content: center;
 }
 
-/* Use consistent button styling from main site */
+/* Enhanced modern button styling */
 .form-actions .btn {
     background: linear-gradient(45deg, #64b5f6, #1976d2);
     color: white;
-    padding: 12px 24px;
+    padding: 14px 28px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none;
     display: inline-block;
-    min-width: 120px;
+    min-width: 140px;
+    position: relative;
+    overflow: hidden;
+}
+
+.form-actions .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
 }
 
 .form-actions .btn:hover {
     background: linear-gradient(45deg, #1976d2, #64b5f6);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(100, 181, 246, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(100, 181, 246, 0.5);
+}
+
+.form-actions .btn:hover::before {
+    left: 100%;
 }
 
 .form-actions .btn-secondary {
@@ -421,6 +497,7 @@ include '../includes/header.php';
 
 .form-actions .btn-secondary:hover {
     background: linear-gradient(45deg, #999, #666);
+    box-shadow: 0 10px 25px rgba(150, 150, 150, 0.4);
 }
 
 .build-presets {

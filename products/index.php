@@ -216,13 +216,37 @@ $categories = $pdo->query("SELECT DISTINCT category FROM products ORDER BY categ
 <style>
 .products-hero {
     text-align: center;
-    padding: 60px 0;
+    padding: 80px 0;
+    background: linear-gradient(135deg, rgba(100, 181, 246, 0.1), rgba(25, 118, 210, 0.1));
+    border-radius: 15px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.products-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(100, 181, 246, 0.1), transparent 70%);
+    pointer-events: none;
+}
+
+.products-hero h1 {
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 0 20px rgba(100, 181, 246, 0.5);
 }
 
 .products-subtitle {
     font-size: 1.3em;
     margin: 20px 0;
     color: #ccc;
+    position: relative;
+    z-index: 1;
 }
 
 .products-content {
@@ -235,13 +259,20 @@ $categories = $pdo->query("SELECT DISTINCT category FROM products ORDER BY categ
 }
 
 .filters-sidebar {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     padding: 30px;
     height: fit-content;
     position: sticky;
     top: 20px;
+    transition: all 0.3s ease;
+}
+
+.filters-sidebar:hover {
+    box-shadow: 0 15px 50px rgba(100, 181, 246, 0.1);
 }
 
 .filter-section {
@@ -268,19 +299,29 @@ $categories = $pdo->query("SELECT DISTINCT category FROM products ORDER BY categ
 .filter-group input,
 .filter-group select {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #444;
-    border-radius: 5px;
-    background: rgba(255, 255, 255, 0.1);
+    padding: 12px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(5px);
     color: #fff;
     font-size: 14px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .filter-group input:focus,
 .filter-group select:focus {
     outline: none;
     border-color: #64b5f6;
-    box-shadow: 0 0 10px rgba(100, 181, 246, 0.3);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 20px rgba(100, 181, 246, 0.3);
+    transform: translateY(-1px);
+}
+
+.filter-group input:hover,
+.filter-group select:hover {
+    border-color: rgba(100, 181, 246, 0.5);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .price-inputs {
@@ -299,8 +340,39 @@ $categories = $pdo->query("SELECT DISTINCT category FROM products ORDER BY categ
 
 .filter-actions {
     display: flex;
-    gap: 10px;
+    gap: 15px;
     flex-wrap: wrap;
+}
+
+.filter-actions .btn {
+    background: linear-gradient(45deg, #64b5f6, #1976d2);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    min-width: 100px;
+}
+
+.filter-actions .btn:hover {
+    background: linear-gradient(45deg, #1976d2, #64b5f6);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(100, 181, 246, 0.4);
+}
+
+.filter-actions .btn-secondary {
+    background: linear-gradient(45deg, #666, #999);
+}
+
+.filter-actions .btn-secondary:hover {
+    background: linear-gradient(45deg, #999, #666);
+    box-shadow: 0 8px 20px rgba(150, 150, 150, 0.3);
 }
 
 .stats {
@@ -375,17 +447,36 @@ $categories = $pdo->query("SELECT DISTINCT category FROM products ORDER BY categ
 }
 
 .product-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.product-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #64b5f6, #1976d2);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    border-color: #64b5f6;
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px rgba(100, 181, 246, 0.2);
+    border-color: rgba(100, 181, 246, 0.5);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.product-card:hover::before {
+    opacity: 1;
 }
 
 .product-image {
@@ -471,6 +562,32 @@ $categories = $pdo->query("SELECT DISTINCT category FROM products ORDER BY categ
     flex: 1;
     min-width: 120px;
     text-align: center;
+    background: linear-gradient(45deg, #64b5f6, #1976d2);
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    display: inline-block;
+}
+
+.product-actions .btn:hover {
+    background: linear-gradient(45deg, #1976d2, #64b5f6);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(100, 181, 246, 0.4);
+}
+
+.product-actions .btn-secondary {
+    background: linear-gradient(45deg, #666, #999);
+}
+
+.product-actions .btn-secondary:hover {
+    background: linear-gradient(45deg, #999, #666);
+    box-shadow: 0 6px 15px rgba(150, 150, 150, 0.3);
 }
 
 .no-products {

@@ -175,13 +175,37 @@ include 'includes/header.php';
 <style>
 .contact-hero {
     text-align: center;
-    padding: 60px 0;
+    padding: 80px 0;
+    background: linear-gradient(135deg, rgba(100, 181, 246, 0.1), rgba(25, 118, 210, 0.1));
+    border-radius: 15px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(100, 181, 246, 0.1), transparent 70%);
+    pointer-events: none;
+}
+
+.contact-hero h1 {
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 0 20px rgba(100, 181, 246, 0.5);
 }
 
 .contact-subtitle {
     font-size: 1.3em;
     margin: 20px 0;
     color: #ccc;
+    position: relative;
+    z-index: 1;
 }
 
 .contact-content {
@@ -206,9 +230,36 @@ include 'includes/header.php';
 .info-item {
     text-align: center;
     padding: 30px 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.info-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #64b5f6, #1976d2, #64b5f6);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.info-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 50px rgba(100, 181, 246, 0.2);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.info-item:hover::before {
+    opacity: 1;
 }
 
 .info-icon {
@@ -227,10 +278,25 @@ include 'includes/header.php';
 }
 
 .contact-form {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
     padding: 40px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #64b5f6, #1976d2, #64b5f6);
+    opacity: 0.8;
 }
 
 .form-row {
@@ -274,9 +340,18 @@ include 'includes/header.php';
 
 .faq-item {
     padding: 30px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faq-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 50px rgba(100, 181, 246, 0.15);
+    background: rgba(255, 255, 255, 0.12);
 }
 
 .faq-item h3 {
@@ -303,19 +378,22 @@ include 'includes/header.php';
     align-items: center;
     gap: 10px;
     padding: 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
     text-decoration: none;
     color: #fff;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     min-width: 120px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 .social-link:hover {
-    background: rgba(100, 181, 246, 0.1);
-    border-color: #64b5f6;
-    transform: translateY(-5px);
+    background: rgba(100, 181, 246, 0.15);
+    border-color: rgba(100, 181, 246, 0.5);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(100, 181, 246, 0.3);
 }
 
 .social-icon {
