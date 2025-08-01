@@ -491,8 +491,16 @@ $page_title = $product['name'] . " - Product Details";
     display: flex;
     justify-content: space-between;
     padding: 15px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.spec-row:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateX(5px);
 }
 
 .spec-name {
@@ -512,9 +520,18 @@ $page_title = $product['name'] . " - Product Details";
 .reviews-summary {
     text-align: center;
     margin-bottom: 30px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.reviews-summary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(100, 181, 246, 0.15);
 }
 
 .rating {
@@ -534,9 +551,18 @@ $page_title = $product['name'] . " - Product Details";
 
 .review-item {
     margin-bottom: 20px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.review-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(100, 181, 246, 0.1);
 }
 
 .review-header {
