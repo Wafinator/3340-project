@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../includes/db.php';
+// Static data for myweb hosting
 
 // Check if user is logged in and is admin
 if (!isset($_SESSION['user_id']) || empty($_SESSION['is_admin'])) {
@@ -23,28 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $current_password = $_POST['current_password'] ?? '';
             $new_password = $_POST['new_password'] ?? '';
             
-            // Validate current password
-            $stmt = $pdo->prepare("SELECT password_hash FROM users WHERE id = ?");
-            $stmt->execute([$_SESSION['user_id']]);
-            $user = $stmt->fetch();
-            
-            if (!password_verify($current_password, $user['password_hash'])) {
-                $_SESSION['admin_error'] = "Current password is incorrect.";
-            } else {
-                // Update email if provided
-                if (!empty($new_email)) {
-                    $stmt = $pdo->prepare("UPDATE users SET email = ? WHERE id = ?");
-                    $stmt->execute([$new_email, $_SESSION['user_id']]);
-                }
-                
-                // Update password if provided
-                if (!empty($new_password)) {
-                    $new_hash = password_hash($new_password, PASSWORD_DEFAULT);
-                    $stmt = $pdo->prepare("UPDATE users SET password_hash = ? WHERE id = ?");
-                    $stmt->execute([$new_hash, $_SESSION['user_id']]);
-                }
-                
-                $_SESSION['admin_message'] = "Admin profile updated successfully.";
+            // Demo mode - simulate profile update for myweb hosting
+            $_SESSION['admin_message'] = "Admin profile updated successfully! (Demo mode - not permanently saved)";
             }
             break;
             
@@ -59,9 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Get current admin user data
-$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
-$stmt->execute([$_SESSION['user_id']]);
-$admin_user = $stmt->fetch();
+// Demo admin user details for myweb hosting
+$admin_user = [
+    'id' => $_SESSION['user_id'] ?? 1,
+    'username' => $_SESSION['username'] ?? 'admin',
+    'email' => 'admin@wafitechparts.com',
+    'created_at' => '2024-01-01'
+];
 
 $page_title = "Admin Settings";
 include '../includes/header.php';
@@ -164,7 +148,7 @@ include '../includes/header.php';
                         
                         <div class="info-item">
                             <strong>MySQL Version:</strong>
-                            <span><?php echo $pdo->query('SELECT VERSION()')->fetchColumn(); ?></span>
+                            <span>Demo Mode 1.0 (myweb hosting)</span>
                         </div>
                         
                         <div class="info-item">
@@ -203,8 +187,9 @@ include '../includes/header.php';
                         $status = [];
                         
                         foreach ($tables as $table) {
-                            $stmt = $pdo->query("SELECT COUNT(*) FROM $table");
-                            $count = $stmt->fetchColumn();
+                                                // Demo table counts for myweb hosting
+                    $counts = ['users' => 42, 'products' => 6, 'orders' => 18, 'contact_messages' => 5];
+                    $count = $counts[$table] ?? 0;
                             $status[$table] = $count;
                         }
                     ?>

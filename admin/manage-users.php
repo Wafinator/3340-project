@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../includes/db.php';
+// Static data for myweb hosting
 
 // Check if user is logged in and is admin
 if (!isset($_SESSION['user_id']) || empty($_SESSION['is_admin'])) {
@@ -8,25 +8,21 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['is_admin'])) {
     exit;
 }
 
-// Handle user actions (disable/enable, delete)
+// Demo mode - user actions simulation for myweb hosting
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     $user_id = intval($_POST['user_id'] ?? 0);
     
     switch ($action) {
         case 'toggle_status':
-            // For now, just show a message since is_active column doesn't exist
-            $_SESSION['admin_message'] = "User status toggle not implemented yet.";
+            $_SESSION['admin_message'] = "User status toggled successfully! (Demo mode)";
             break;
             
         case 'delete':
-            // Don't allow admin to delete themselves
             if ($user_id == $_SESSION['user_id']) {
                 $_SESSION['admin_error'] = "You cannot delete your own account.";
             } else {
-                $stmt = $pdo->prepare("DELETE FROM users WHERE id = ?");
-                $stmt->execute([$user_id]);
-                $_SESSION['admin_message'] = "User deleted successfully.";
+                $_SESSION['admin_message'] = "User deleted successfully! (Demo mode)";
             }
             break;
     }
@@ -40,13 +36,18 @@ $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $per_page = 10;
 $offset = ($page - 1) * $per_page;
 
-$stmt = $pdo->query("SELECT COUNT(*) as total FROM users");
-$total_users = $stmt->fetch()['total'];
+// Demo users data for myweb hosting
+$demo_users = [
+    ['id' => 1, 'username' => 'admin', 'email' => 'admin@wafitechparts.com', 'is_admin' => 1, 'created_at' => '2024-01-01'],
+    ['id' => 2, 'username' => 'john_doe', 'email' => 'john@example.com', 'is_admin' => 0, 'created_at' => '2024-01-15'],
+    ['id' => 3, 'username' => 'jane_smith', 'email' => 'jane@example.com', 'is_admin' => 0, 'created_at' => '2024-01-20'],
+    ['id' => 4, 'username' => 'mike_wilson', 'email' => 'mike@example.com', 'is_admin' => 0, 'created_at' => '2024-01-25'],
+];
+$total_users = count($demo_users);
 $total_pages = ceil($total_users / $per_page);
 
-$stmt = $pdo->prepare("SELECT * FROM users ORDER BY id DESC LIMIT ? OFFSET ?");
-$stmt->execute([$per_page, $offset]);
-$users = $stmt->fetchAll();
+// Paginate demo users
+$users = array_slice($demo_users, $offset, $per_page);
 
 $page_title = "Manage Users";
 include '../includes/header.php';

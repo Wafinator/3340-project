@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../includes/db.php';
+// Static data for myweb hosting
 
 // Check if user is logged in and is admin
 if (!isset($_SESSION['user_id']) || empty($_SESSION['is_admin'])) {
@@ -8,23 +8,20 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['is_admin'])) {
     exit;
 }
 
-// Get system statistics
-$stats = [];
-$stmt = $pdo->query("SELECT COUNT(*) as total FROM users");
-$stats['users'] = $stmt->fetch()['total'];
+// Demo statistics for myweb hosting
+$stats = [
+    'users' => 42,
+    'products' => 6,
+    'orders' => 18,
+    'recent_messages' => 5
+];
 
-$stmt = $pdo->query("SELECT COUNT(*) as total FROM products");
-$stats['products'] = $stmt->fetch()['total'];
-
-$stmt = $pdo->query("SELECT COUNT(*) as total FROM orders");
-$stats['orders'] = $stmt->fetch()['total'];
-
-$stmt = $pdo->query("SELECT COUNT(*) as total FROM contact_messages WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)");
-$stats['recent_messages'] = $stmt->fetch()['total'];
-
-// Get system status
-$stmt = $pdo->query("SELECT * FROM system_status ORDER BY service_name");
-$system_status = $stmt->fetchAll();
+// Demo system status
+$system_status = [
+    ['service_name' => 'Web Server', 'status' => 'Operational', 'last_checked' => date('Y-m-d H:i:s')],
+    ['service_name' => 'Payment Gateway', 'status' => 'Operational', 'last_checked' => date('Y-m-d H:i:s')],
+    ['service_name' => 'Email Service', 'status' => 'Operational', 'last_checked' => date('Y-m-d H:i:s')],
+];
 
 $page_title = "Admin Dashboard";
 include '../includes/header.php';
@@ -102,8 +99,11 @@ include '../includes/header.php';
                 <div class="activity-list">
                     <?php
                     // Get recent orders
-                    $stmt = $pdo->query("SELECT o.*, u.username FROM orders o LEFT JOIN users u ON o.user_id = u.id ORDER BY o.created_at DESC LIMIT 5");
-                    $recent_orders = $stmt->fetchAll();
+                                $recent_orders = [
+                ['id' => 1001, 'total_amount' => 1299.99, 'status' => 'Delivered', 'created_at' => '2024-01-30', 'username' => 'john_doe'],
+                ['id' => 1002, 'total_amount' => 459.98, 'status' => 'Shipped', 'created_at' => '2024-01-29', 'username' => 'jane_smith'],
+                ['id' => 1003, 'total_amount' => 89.99, 'status' => 'Processing', 'created_at' => '2024-01-28', 'username' => 'mike_wilson']
+            ];
                     ?>
                     
                     <div class="activity-section">
@@ -129,8 +129,11 @@ include '../includes/header.php';
 
                     <?php
                     // Get recent contact messages
-                    $stmt = $pdo->query("SELECT * FROM contact_messages ORDER BY created_at DESC LIMIT 5");
-                    $recent_messages = $stmt->fetchAll();
+                                $recent_messages = [
+                ['id' => 1, 'first_name' => 'Alice', 'last_name' => 'Johnson', 'email' => 'alice@example.com', 'subject' => 'Product Inquiry', 'created_at' => '2024-01-30'],
+                ['id' => 2, 'first_name' => 'Bob', 'last_name' => 'Brown', 'email' => 'bob@example.com', 'subject' => 'Support Request', 'created_at' => '2024-01-29'],
+                ['id' => 3, 'first_name' => 'Carol', 'last_name' => 'Davis', 'email' => 'carol@example.com', 'subject' => 'Technical Question', 'created_at' => '2024-01-28']
+            ];
                     ?>
                     
                     <div class="activity-section">

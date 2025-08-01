@@ -8,31 +8,13 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['is_admin'])) {
     exit;
 }
 
-// Handle product actions
+// Demo mode - product actions simulation for myweb hosting
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     
     switch ($action) {
         case 'add':
-            $name = trim($_POST['name'] ?? '');
-            $description = trim($_POST['description'] ?? '');
-            $price = floatval($_POST['price'] ?? 0);
-            $category = trim($_POST['category'] ?? '');
-            $subcategory = trim($_POST['subcategory'] ?? '');
-            $brand = trim($_POST['brand'] ?? '');
-            $stock_quantity = intval($_POST['stock_quantity'] ?? 0);
-            $featured = isset($_POST['featured']) ? 1 : 0;
-            
-            if (!empty($name) && $price > 0 && !empty($category)) {
-                $stmt = $pdo->prepare("
-                    INSERT INTO products (name, description, price, category, subcategory, brand, stock_quantity, featured) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                ");
-                $stmt->execute([$name, $description, $price, $category, $subcategory, $brand, $stock_quantity, $featured]);
-                $success_message = "Product added successfully!";
-            } else {
-                $error_message = "Please fill in all required fields.";
-            }
+            $success_message = "Product added successfully! (Demo mode - not permanently saved)";
             break;
             
         case 'update':
@@ -46,25 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stock_quantity = intval($_POST['stock_quantity'] ?? 0);
             $featured = isset($_POST['featured']) ? 1 : 0;
             
-            if ($id > 0 && !empty($name) && $price > 0 && !empty($category)) {
-                $stmt = $pdo->prepare("
-                    UPDATE products SET name = ?, description = ?, price = ?, category = ?, subcategory = ?, brand = ?, stock_quantity = ?, featured = ? 
-                    WHERE id = ?
-                ");
-                $stmt->execute([$name, $description, $price, $category, $subcategory, $brand, $stock_quantity, $featured, $id]);
-                $success_message = "Product updated successfully!";
-            } else {
-                $error_message = "Please fill in all required fields.";
-            }
+            $success_message = "Product updated successfully! (Demo mode - not permanently saved)";
             break;
             
         case 'delete':
-            $id = intval($_POST['id'] ?? 0);
-            if ($id > 0) {
-                $stmt = $pdo->prepare("DELETE FROM products WHERE id = ?");
-                $stmt->execute([$id]);
-                $success_message = "Product deleted successfully!";
-            }
+            $success_message = "Product deleted successfully! (Demo mode)";
             break;
     }
 }
@@ -74,13 +42,13 @@ $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $per_page = 10;
 $offset = ($page - 1) * $per_page;
 
-$stmt = $pdo->query("SELECT COUNT(*) as total FROM products");
-$total_products = $stmt->fetch()['total'];
+// Demo products data for myweb hosting
+require_once '../includes/db.php';
+$total_products = count($products);
 $total_pages = ceil($total_products / $per_page);
 
-$stmt = $pdo->prepare("SELECT * FROM products ORDER BY created_at DESC LIMIT ? OFFSET ?");
-$stmt->execute([$per_page, $offset]);
-$products = $stmt->fetchAll();
+// Paginate demo products
+$demo_products = array_slice($products, $offset, $per_page);
 
 $page_title = "Manage Products";
 include '../includes/header.php';
@@ -199,7 +167,7 @@ include '../includes/header.php';
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($products as $product): ?>
+                                <?php foreach ($demo_products as $product): ?>
                                 <tr>
                                     <td><?php echo $product['id']; ?></td>
                                     <td>

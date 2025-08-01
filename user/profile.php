@@ -1,6 +1,5 @@
 <?php
 session_start();
-require_once '../includes/db.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -24,23 +23,12 @@ $user = [
     'theme_preference' => 'dark'
 ];
 
-// Get user's orders (with error handling for missing tables)
-$orders = [];
-try {
-    $stmt = $pdo->prepare("
-        SELECT o.*, COUNT(oi.id) as item_count 
-        FROM orders o 
-        LEFT JOIN order_items oi ON o.id = oi.order_id 
-        WHERE o.user_id = ? 
-        GROUP BY o.id 
-        ORDER BY o.id DESC
-    ");
-    $stmt->execute([$_SESSION['user_id']]);
-    $orders = $stmt->fetchAll();
-} catch (PDOException $e) {
-    // If orders table doesn't exist, just use empty array
-    $orders = [];
-}
+// Demo orders for myweb hosting
+$orders = [
+    ['id' => 1001, 'total_amount' => 1299.99, 'status' => 'Delivered', 'created_at' => '2024-01-15', 'item_count' => 4],
+    ['id' => 1002, 'total_amount' => 459.98, 'status' => 'Shipped', 'created_at' => '2024-01-22', 'item_count' => 2],
+    ['id' => 1003, 'total_amount' => 89.99, 'status' => 'Processing', 'created_at' => '2024-01-30', 'item_count' => 1]
+];
 
 // Handle profile updates
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -87,20 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $params[] = password_hash($new_password, PASSWORD_DEFAULT);
                 }
                 
-                if (!empty($updates)) {
-                    $params[] = $_SESSION['user_id'];
-                    $stmt = $pdo->prepare("UPDATE users SET " . implode(", ", $updates) . " WHERE id = ?");
-                    $stmt->execute($params);
-                    $success_message = "Profile updated successfully!";
-                    
-                    // Update session email if changed
-                    if (!empty($email)) {
-                        $_SESSION['email'] = $email;
-                    }
-                }
-            } catch (PDOException $e) {
-                $errors[] = "Database error: " . $e->getMessage();
-            }
+                $success_message = "Profile updated successfully! (Demo mode - changes not permanently stored)";
         }
     }
 }

@@ -1,9 +1,8 @@
 <?php
-// Static Demo Data for myweb hosting
-// No database required - using mock data for demonstration
+// Static Data for myweb hosting - No database needed
 
-// Mock Products Data
-$mock_products = [
+// Products Data
+$products = [
     [
         'id' => 1,
         'name' => 'Intel Core i7-13700K',
@@ -78,61 +77,6 @@ $mock_products = [
     ]
 ];
 
-// Mock Categories
-$mock_categories = [
-    ['category' => 'CPU'],
-    ['category' => 'GPU'],
-    ['category' => 'RAM'],
-    ['category' => 'Storage'],
-    ['category' => 'Motherboard'],
-    ['category' => 'PSU'],
-    ['category' => 'Case'],
-    ['category' => 'Cooling']
-];
-
-// Mock PDO class for compatibility
-class MockPDO {
-    public function query($query) {
-        return new MockStatement();
-    }
-    
-    public function prepare($query) {
-        return new MockStatement();
-    }
-}
-
-class MockStatement {
-    public function execute($params = []) {
-        return true;
-    }
-    
-    public function fetchAll() {
-        global $mock_products, $mock_categories;
-        
-        // Return different data based on what's being queried
-        $trace = debug_backtrace();
-        $caller = '';
-        if (isset($trace[2]['file'])) {
-            $caller = $trace[2]['file'];
-        }
-        
-        if (strpos($caller, 'categories') !== false || strpos($caller, 'DISTINCT category') !== false) {
-            return $mock_categories;
-        }
-        
-        return $mock_products;
-    }
-    
-    public function fetch() {
-        global $mock_products;
-        return $mock_products[0] ?? null;
-    }
-    
-    public function fetchColumn() {
-        return 'Demo Version 1.0';
-    }
-}
-
-// Create mock PDO instance
-$pdo = new MockPDO();
+// Categories
+$categories = ['CPU', 'GPU', 'RAM', 'Storage', 'Motherboard', 'PSU', 'Case', 'Cooling'];
 ?>

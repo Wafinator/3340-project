@@ -11,56 +11,49 @@ $price_max = $_GET['price_max'] ?? '';
 $search = $_GET['search'] ?? '';
 $sort = $_GET['sort'] ?? 'name';
 
-// Build the SQL query with filters
-$sql = "SELECT * FROM products WHERE 1=1";
-$params = [];
+// Filter products using static data
+$filtered_products = $products;
 
 if ($category_filter) {
-    $sql .= " AND category = ?";
-    $params[] = $category_filter;
+    $filtered_products = array_filter($filtered_products, function($product) use ($category_filter) {
+        return $product['category'] == $category_filter;
+    });
 }
 
-// Brand filter removed - brand column doesn't exist in current database
-
 if ($price_min !== '') {
-    $sql .= " AND price >= ?";
-    $params[] = $price_min;
+    $filtered_products = array_filter($filtered_products, function($product) use ($price_min) {
+        return $product['price'] >= floatval($price_min);
+    });
 }
 
 if ($price_max !== '') {
-    $sql .= " AND price <= ?";
-    $params[] = $price_max;
+    $filtered_products = array_filter($filtered_products, function($product) use ($price_max) {
+        return $product['price'] <= floatval($price_max);
+    });
 }
 
 if ($search) {
-    $sql .= " AND (name LIKE ? OR description LIKE ?)";
-    $search_term = "%$search%";
-    $params[] = $search_term;
-    $params[] = $search_term;
+    $filtered_products = array_filter($filtered_products, function($product) use ($search) {
+        return stripos($product['name'], $search) !== false || 
+               stripos($product['description'], $search) !== false;
+    });
 }
 
-// Add sorting
+// Sort products
 switch ($sort) {
     case 'price_low':
-        $sql .= " ORDER BY price ASC";
+        usort($filtered_products, function($a, $b) { return $a['price'] <=> $b['price']; });
         break;
     case 'price_high':
-        $sql .= " ORDER BY price DESC";
+        usort($filtered_products, function($a, $b) { return $b['price'] <=> $a['price']; });
         break;
     case 'brand':
-        $sql .= " ORDER BY name ASC"; // Brand column doesn't exist, fallback to name
-        break;
     default:
-        $sql .= " ORDER BY name ASC";
+        usort($filtered_products, function($a, $b) { return strcmp($a['name'], $b['name']); });
+        break;
 }
 
-$stmt = $pdo->prepare($sql);
-$stmt->execute($params);
-$products = $stmt->fetchAll();
-
-// Get unique categories for filters
-$categories = $pdo->query("SELECT DISTINCT category FROM products ORDER BY category")->fetchAll();
-// Brand filter removed - brand column doesn't exist in current database
+$products = array_values($filtered_products);
 ?>
 
 <div class="container">
