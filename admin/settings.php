@@ -25,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             // Demo mode - simulate profile update for myweb hosting
             $_SESSION['admin_message'] = "Admin profile updated successfully! (Demo mode - not permanently saved)";
-            }
             break;
             
         case 'clear_cache':
