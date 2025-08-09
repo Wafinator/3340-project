@@ -27,6 +27,51 @@ $stmt->execute([$product['category'], $product_id]);
 $related_products = $stmt->fetchAll();
 
 $page_title = $product['name'] . " - Product Details";
+
+// Handle Add to Cart and Review submissions
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['add_to_cart'])) {
+        $quantity = max(1, (int)($_POST['quantity'] ?? 1));
+        $_SESSION['cart'] = $_SESSION['cart'] ?? [];
+        $key = (string)$product_id;
+        if (!isset($_SESSION['cart'][$key])) {
+            $_SESSION['cart'][$key] = [
+                'product_id' => $product_id,
+                'name' => $product['name'],
+                'price' => (float)$product['price'],
+                'image' => $product['image'],
+                'quantity' => 0,
+            ];
+        }
+        $_SESSION['cart'][$key]['quantity'] += $quantity;
+        header('Location: view.php?id=' . urlencode($product_id) . '&added=1');
+        exit;
+    }
+
+    if (isset($_POST['submit_review'])) {
+        $rating = max(1, min(5, (int)($_POST['rating'] ?? 5)));
+        $review_text = trim($_POST['review'] ?? '');
+        $reviewer = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
+        try {
+            $stmt = $pdo->prepare("INSERT INTO product_reviews (product_id, reviewer, rating, review_text, created_at) VALUES (?, ?, ?, ?, NOW())");
+            $stmt->execute([$product_id, $reviewer, $rating, $review_text]);
+            header('Location: view.php?id=' . urlencode($product_id) . '#reviews');
+            exit;
+        } catch (Exception $e) {
+            // ignore if table missing
+        }
+    }
+}
+
+// Fetch reviews
+$reviews = [];
+try {
+    $stmt = $pdo->prepare("SELECT * FROM product_reviews WHERE product_id = ? ORDER BY created_at DESC LIMIT 10");
+    $stmt->execute([$product_id]);
+    $reviews = $stmt->fetchAll();
+} catch (Exception $e) {
+    $reviews = [];
+}
 ?>
 
 <div class="container">
@@ -101,14 +146,19 @@ $page_title = $product['name'] . " - Product Details";
                 </div>
 
                 <div class="product-actions">
-                    <button class="btn btn-primary add-to-calculator" 
+                    <form method="post" style="display:inline-flex; gap:10px; align-items:center;">
+                        <input type="hidden" name="add_to_cart" value="1">
+                        <label for="qty" style="color:#ccc;">Qty</label>
+                        <input id="qty" type="number" name="quantity" value="1" min="1" style="width:70px;">
+                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                    </form>
+                    <button class="btn btn-secondary add-to-calculator" 
                             data-product-id="<?= $product['id'] ?>"
                             data-product-name="<?= htmlspecialchars($product['name']) ?>"
                             data-product-price="<?= $product['price'] ?>">
-                        Add to Build Calculator
+                        Add to Calculator
                     </button>
-                    <a href="../products/build-calculator.php" class="btn btn-secondary">View Calculator</a>
-                    <button class="btn btn-outline share-product">Share Product</button>
+                    <a href="../products/build-calculator.php" class="btn btn-outline">View Calculator</a>
                 </div>
 
                 <div class="product-features">
@@ -130,7 +180,7 @@ $page_title = $product['name'] . " - Product Details";
                 <button class="tab-btn active" data-tab="details">Product Details</button>
                 <button class="tab-btn" data-tab="specs">Full Specifications</button>
                 <button class="tab-btn" data-tab="compatibility">Compatibility</button>
-                <button class="tab-btn" data-tab="reviews">Reviews</button>
+                <button class="tab-btn" data-tab="reviews" id="reviews">Reviews</button>
             </div>
 
             <div class="tab-content">
@@ -206,30 +256,41 @@ $page_title = $product['name'] . " - Product Details";
                 <!-- Reviews Tab -->
                 <div class="tab-pane" id="reviews">
                     <h3>Customer Reviews</h3>
-                    <div class="reviews-summary">
-                        <div class="rating">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-text">4.8 out of 5</span>
+                    <?php if (empty($reviews)): ?>
+                        <p>No reviews yet. Be the first to review this product.</p>
+                    <?php else: ?>
+                        <?php foreach ($reviews as $rev): ?>
+                        <div class="review-item">
+                            <div class="review-header">
+                                <span class="reviewer-name"><?php echo htmlspecialchars($rev['reviewer']); ?></span>
+                                <span class="review-date"><?php echo date('M j, Y', strtotime($rev['created_at'])); ?></span>
+                                <span class="review-rating"><?php echo str_repeat('★', (int)$rev['rating']); ?></span>
+                            </div>
+                            <p class="review-text"><?php echo htmlspecialchars($rev['review_text']); ?></p>
                         </div>
-                        <p>Based on customer reviews</p>
-                    </div>
-                    
-                    <div class="review-item">
-                        <div class="review-header">
-                            <span class="reviewer-name">Alex M.</span>
-                            <span class="review-date">2 weeks ago</span>
-                            <span class="review-rating">★★★★★</span>
-                        </div>
-                        <p class="review-text">"Excellent <?= htmlspecialchars($product['category']) ?>! Works perfectly with my build. Great performance and the price was right."</p>
-                    </div>
-                    
-                    <div class="review-item">
-                        <div class="review-header">
-                            <span class="reviewer-name">Sarah K.</span>
-                            <span class="review-date">1 month ago</span>
-                            <span class="review-rating">★★★★★</span>
-                        </div>
-                        <p class="review-text">"Very happy with this purchase. Installation was straightforward and it's been running smoothly for weeks."</p>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+
+                    <div class="review-form">
+                        <h4>Write a Review</h4>
+                        <form method="post">
+                            <input type="hidden" name="submit_review" value="1">
+                            <div class="form-group">
+                                <label for="rating">Rating</label>
+                                <select id="rating" name="rating">
+                                    <option value="5">★★★★★</option>
+                                    <option value="4">★★★★☆</option>
+                                    <option value="3">★★★☆☆</option>
+                                    <option value="2">★★☆☆☆</option>
+                                    <option value="1">★☆☆☆☆</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="review">Review</label>
+                                <textarea id="review" name="review" rows="4" placeholder="Share your experience..."></textarea>
+                            </div>
+                            <button type="submit" class="btn">Submit Review</button>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -20,6 +20,11 @@ if ($category_filter) {
     $params[] = $category_filter;
 }
 
+if ($brand_filter) {
+    $sql .= " AND brand = ?";
+    $params[] = $brand_filter;
+}
+
 if ($price_min !== '') {
     $sql .= " AND price >= ?";
     $params[] = $price_min;
@@ -54,8 +59,9 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
 $products = $stmt->fetchAll();
 
-// Get unique categories for filters
+// Get unique categories and brands for filters
 $categories = $pdo->query("SELECT DISTINCT category FROM products ORDER BY category")->fetchAll();
+$brands = $pdo->query("SELECT DISTINCT brand FROM products WHERE brand IS NOT NULL AND brand <> '' ORDER BY brand")->fetchAll();
 ?>
 
 <div class="container">
@@ -92,13 +98,17 @@ $categories = $pdo->query("SELECT DISTINCT category FROM products ORDER BY categ
                         </select>
                     </div>
 
-                    <!-- Brand Filter - Disabled (brand column doesn't exist) -->
+                    <!-- Brand Filter -->
                     <div class="filter-group">
                         <label for="brand">Brand</label>
-                        <select id="brand" name="brand" disabled>
-                            <option value="">Brand filter not available</option>
+                        <select id="brand" name="brand">
+                            <option value="">All Brands</option>
+                            <?php foreach ($brands as $b): ?>
+                                <option value="<?= htmlspecialchars($b['brand']) ?>" <?= $brand_filter === $b['brand'] ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($b['brand']) ?>
+                                </option>
+                            <?php endforeach; ?>
                         </select>
-                        <small>Brand filtering not available in current database</small>
                     </div>
 
                     <!-- Price Range -->
@@ -132,7 +142,7 @@ $categories = $pdo->query("SELECT DISTINCT category FROM products ORDER BY categ
             </div>
 
             <!-- Quick Stats -->
-            <div class="filter-section">
+                    <div class="filter-section">
                 <h3>Quick Stats</h3>
                 <div class="stats">
                     <div class="stat-item">
@@ -144,7 +154,7 @@ $categories = $pdo->query("SELECT DISTINCT category FROM products ORDER BY categ
                         <span class="stat-label">Categories</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number"><?= count($brands) ?></span>
+                        <span class="stat-number"><?= isset($brands) ? count($brands) : 0 ?></span>
                         <span class="stat-label">Brands</span>
                     </div>
                 </div>

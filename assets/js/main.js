@@ -1,6 +1,6 @@
 // Main JavaScript for WafiTechParts
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Initialize all components
     initMobileMenu();
     initThemeSwitcher();
@@ -8,21 +8,22 @@ document.addEventListener('DOMContentLoaded', function() {
     initProductFilters();
     initBuildCalculator();
     initSearchFunctionality();
+    initCartBadgeUpdater();
 });
 
 // Mobile Menu Toggle
 function initMobileMenu() {
     const mobileToggle = document.querySelector('.mobile-menu-toggle');
     const navLinks = document.querySelector('.nav-links');
-    
+
     if (mobileToggle && navLinks) {
-        mobileToggle.addEventListener('click', function() {
+        mobileToggle.addEventListener('click', function () {
             navLinks.classList.toggle('active');
             mobileToggle.classList.toggle('active');
         });
-        
+
         // Close mobile menu when clicking outside
-        document.addEventListener('click', function(event) {
+        document.addEventListener('click', function (event) {
             if (!mobileToggle.contains(event.target) && !navLinks.contains(event.target)) {
                 navLinks.classList.remove('active');
                 mobileToggle.classList.remove('active');
@@ -35,7 +36,7 @@ function initMobileMenu() {
 function initThemeSwitcher() {
     const themeSelect = document.getElementById('theme-select');
     if (themeSelect) {
-        themeSelect.addEventListener('change', function() {
+        themeSelect.addEventListener('change', function () {
             changeTheme(this.value);
         });
     }
@@ -51,7 +52,7 @@ function changeTheme(theme) {
     loadingIndicator.style.transform = 'translate(-50%, -50%)';
     loadingIndicator.style.zIndex = '9999';
     document.body.appendChild(loadingIndicator);
-    
+
     // Send AJAX request to update theme
     fetch('user/update-theme.php', {
         method: 'POST',
@@ -60,30 +61,42 @@ function changeTheme(theme) {
         },
         body: 'theme=' + theme
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Reload page to apply new theme
-            window.location.reload();
-        } else {
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Reload page to apply new theme
+                window.location.reload();
+            } else {
+                showAlert('Error changing theme. Please try again.', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error changing theme:', error);
             showAlert('Error changing theme. Please try again.', 'error');
+        })
+        .finally(() => {
+            document.body.removeChild(loadingIndicator);
+        });
+}
+
+// Cart badge updater
+function initCartBadgeUpdater() {
+    // Watch for cart changes via events from cart page
+    document.addEventListener('cart-updated', function(e) {
+        const count = e.detail && e.detail.count ? e.detail.count : null;
+        if (count !== null) {
+            const badge = document.getElementById('cart-count');
+            if (badge) badge.textContent = count;
         }
-    })
-    .catch(error => {
-        console.error('Error changing theme:', error);
-        showAlert('Error changing theme. Please try again.', 'error');
-    })
-    .finally(() => {
-        document.body.removeChild(loadingIndicator);
     });
 }
 
 // Form Validation
 function initFormValidation() {
     const forms = document.querySelectorAll('form[data-validate]');
-    
+
     forms.forEach(form => {
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', function (e) {
             if (!validateForm(this)) {
                 e.preventDefault();
             }
@@ -94,7 +107,7 @@ function initFormValidation() {
 function validateForm(form) {
     let isValid = true;
     const requiredFields = form.querySelectorAll('[required]');
-    
+
     requiredFields.forEach(field => {
         if (!field.value.trim()) {
             showFieldError(field, 'This field is required.');
@@ -102,7 +115,7 @@ function validateForm(form) {
         } else {
             clearFieldError(field);
         }
-        
+
         // Email validation
         if (field.type === 'email' && field.value.trim()) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -111,7 +124,7 @@ function validateForm(form) {
                 isValid = false;
             }
         }
-        
+
         // Password validation
         if (field.type === 'password' && field.value.trim()) {
             if (field.value.length < 6) {
@@ -120,20 +133,20 @@ function validateForm(form) {
             }
         }
     });
-    
+
     return isValid;
 }
 
 function showFieldError(field, message) {
     clearFieldError(field);
-    
+
     const errorDiv = document.createElement('div');
     errorDiv.className = 'field-error';
     errorDiv.style.color = '#f44336';
     errorDiv.style.fontSize = '0.9em';
     errorDiv.style.marginTop = '5px';
     errorDiv.textContent = message;
-    
+
     field.parentNode.appendChild(errorDiv);
     field.style.borderColor = '#f44336';
 }
@@ -150,15 +163,15 @@ function clearFieldError(field) {
 function initProductFilters() {
     const filterButtons = document.querySelectorAll('.filter-btn');
     const productCards = document.querySelectorAll('.product-card');
-    
+
     filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const category = this.dataset.category;
-            
+
             // Update active filter button
             filterButtons.forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
-            
+
             // Filter products
             productCards.forEach(card => {
                 if (category === 'all' || card.dataset.category === category) {
@@ -176,11 +189,11 @@ function initProductFilters() {
 function initBuildCalculator() {
     const calculatorForm = document.getElementById('build-calculator');
     if (calculatorForm) {
-        calculatorForm.addEventListener('submit', function(e) {
+        calculatorForm.addEventListener('submit', function (e) {
             e.preventDefault();
             calculateBuild();
         });
-        
+
         // Update total when components change
         const componentSelects = calculatorForm.querySelectorAll('select[data-price]');
         componentSelects.forEach(select => {
@@ -193,14 +206,14 @@ function calculateBuild() {
     const form = document.getElementById('build-calculator');
     const formData = new FormData(form);
     const components = {};
-    
+
     // Collect selected components
     formData.forEach((value, key) => {
         if (key.startsWith('component_')) {
             components[key] = value;
         }
     });
-    
+
     // Calculate total
     let total = 0;
     const componentSelects = form.querySelectorAll('select[data-price]');
@@ -210,7 +223,7 @@ function calculateBuild() {
             total += parseFloat(selectedOption.dataset.price);
         }
     });
-    
+
     // Display results
     const resultsDiv = document.getElementById('build-results');
     if (resultsDiv) {
@@ -229,7 +242,7 @@ function calculateBuild() {
 function updateBuildTotal() {
     const form = document.getElementById('build-calculator');
     let total = 0;
-    
+
     const componentSelects = form.querySelectorAll('select[data-price]');
     componentSelects.forEach(select => {
         const selectedOption = select.options[select.selectedIndex];
@@ -237,7 +250,7 @@ function updateBuildTotal() {
             total += parseFloat(selectedOption.dataset.price);
         }
     });
-    
+
     const totalDisplay = document.getElementById('build-total');
     if (totalDisplay) {
         totalDisplay.textContent = `$${total.toFixed(2)}`;
@@ -256,14 +269,14 @@ function getPerformanceRating(total) {
 function initSearchFunctionality() {
     const searchInput = document.getElementById('search-input');
     if (searchInput) {
-        searchInput.addEventListener('input', function() {
+        searchInput.addEventListener('input', function () {
             const searchTerm = this.value.toLowerCase();
             const productCards = document.querySelectorAll('.product-card');
-            
+
             productCards.forEach(card => {
                 const title = card.querySelector('.product-title').textContent.toLowerCase();
                 const description = card.querySelector('.product-description').textContent.toLowerCase();
-                
+
                 if (title.includes(searchTerm) || description.includes(searchTerm)) {
                     card.style.display = 'block';
                 } else {
@@ -279,20 +292,20 @@ function showAlert(message, type = 'info') {
     const alertDiv = document.createElement('div');
     alertDiv.className = `alert alert-${type}`;
     alertDiv.textContent = message;
-    
+
     // Add close button
     const closeBtn = document.createElement('span');
     closeBtn.innerHTML = '&times;';
     closeBtn.style.float = 'right';
     closeBtn.style.cursor = 'pointer';
     closeBtn.style.fontWeight = 'bold';
-    closeBtn.onclick = function() {
+    closeBtn.onclick = function () {
         document.body.removeChild(alertDiv);
     };
-    
+
     alertDiv.appendChild(closeBtn);
     document.body.insertBefore(alertDiv, document.body.firstChild);
-    
+
     // Auto-remove after 5 seconds
     setTimeout(() => {
         if (document.body.contains(alertDiv)) {
@@ -326,13 +339,13 @@ function saveBuild() {
     const form = document.getElementById('build-calculator');
     const formData = new FormData(form);
     const buildData = {};
-    
+
     formData.forEach((value, key) => {
         if (key.startsWith('component_')) {
             buildData[key] = value;
         }
     });
-    
+
     const savedBuilds = JSON.parse(localStorage.getItem('savedBuilds') || '[]');
     savedBuilds.push({
         id: Date.now(),
@@ -340,7 +353,7 @@ function saveBuild() {
         components: buildData,
         date: new Date().toISOString()
     });
-    
+
     localStorage.setItem('savedBuilds', JSON.stringify(savedBuilds));
     showAlert('Build saved successfully!', 'success');
 }

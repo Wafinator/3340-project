@@ -13,7 +13,8 @@ $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $per_page = 10;
 $offset = ($page - 1) * $per_page;
 
-$stmt = $pdo->query("SELECT COUNT(*) as total FROM orders WHERE user_id = " . $_SESSION['user_id']);
+$stmt = $pdo->prepare("SELECT COUNT(*) as total FROM orders WHERE user_id = ?");
+$stmt->execute([$_SESSION['user_id']]);
 $total_orders = $stmt->fetch()['total'];
 $total_pages = ceil($total_orders / $per_page);
 

@@ -1,0 +1,1 @@
+Note: Ensure assets/css/custom.css includes styles for .cart-badge if needed.

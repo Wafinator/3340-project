@@ -383,6 +383,7 @@ include '../includes/header.php';
                     <h3>🛒 Where to Buy</h3>
                     <ul>
                         <li><a href="../products/index.php">WafiTechParts Store</a></li>
+                        <li><a href="../cart.php">Your Cart</a> and <a href="../checkout.php">Checkout</a></li>
                         <li>Amazon (authorized sellers only)</li>
                         <li>Newegg (reputable retailer)</li>
                         <li>Local computer stores</li>

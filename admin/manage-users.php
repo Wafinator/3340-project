@@ -15,8 +15,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     switch ($action) {
         case 'toggle_status':
-            // For now, just show a message since is_active column doesn't exist
-            $_SESSION['admin_message'] = "User status toggle not implemented yet.";
+            try {
+                // Add column if missing (may fail on older MySQL; harmless)
+                $pdo->exec("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_active TINYINT(1) NOT NULL DEFAULT 1");
+            } catch (Exception $e) { /* ignore */ }
+            try {
+                $stmt = $pdo->prepare("UPDATE users SET is_active = 1 - COALESCE(is_active,1) WHERE id = ?");
+                $stmt->execute([$user_id]);
+                $_SESSION['admin_message'] = "User status toggled.";
+            } catch (Exception $e) {
+                $_SESSION['admin_error'] = "Unable to toggle status. Ensure 'is_active' column exists.";
+            }
             break;
             
         case 'delete':
@@ -113,7 +122,11 @@ include '../includes/header.php';
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <span class="badge badge-active">Active</span>
+                                    <?php if (!isset($user['is_active']) || $user['is_active']): ?>
+                                        <span class="badge badge-active">Active</span>
+                                    <?php else: ?>
+                                        <span class="badge badge-inactive">Disabled</span>
+                                    <?php endif; ?>
                                 </td>
                                 <td><?php echo 'N/A'; ?></td>
                                 <td class="actions">

@@ -108,6 +108,144 @@ include 'includes/header.php';
     </section>
 </div>
 
+<style>
+.hero {
+    text-align: center;
+    padding: 60px 0;
+}
 
+.hero-subtitle {
+    font-size: 1.3em;
+    margin: 20px 0 30px;
+    color: #ccc;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.highlight {
+    color: #64b5f6;
+    text-shadow: 0 0 10px #64b5f6;
+}
+
+.features {
+    margin: 60px 0;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.feature-card {
+    text-align: center;
+    padding: 30px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feature-icon {
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+.feature-card h3 {
+    margin-bottom: 15px;
+    color: #64b5f6;
+}
+
+.featured-products {
+    margin: 60px 0;
+}
+
+.text-center {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.build-guide {
+    margin: 60px 0;
+    text-align: center;
+}
+
+.guide-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    margin: 40px 0;
+}
+
+.step {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background: #64b5f6;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin: 0 auto 15px;
+}
+
+.testimonials {
+    margin: 60px 0;
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.testimonial {
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+.testimonial p {
+    font-style: italic;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.testimonial cite {
+    color: #64b5f6;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .guide-steps {
+        grid-template-columns: 1fr;
+    }
+    
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
 
 <?php include 'includes/footer.php'; ?>

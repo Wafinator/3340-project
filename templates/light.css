@@ -19,7 +19,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
+    background:
         radial-gradient(circle at 20% 50%, rgba(52, 152, 219, 0.03) 0%, transparent 50%),
         radial-gradient(circle at 80% 20%, rgba(155, 89, 182, 0.03) 0%, transparent 50%),
         radial-gradient(circle at 40% 80%, rgba(46, 204, 113, 0.03) 0%, transparent 50%);
@@ -27,7 +27,12 @@ body::before {
     z-index: -1;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-weight: 600;
     letter-spacing: -0.02em;
     color: #1a1a1a;
@@ -65,7 +70,8 @@ nav .nav-container {
     padding: 0 20px;
 }
 
-nav a, nav span {
+nav a,
+nav span {
     color: #2c3e50;
     text-decoration: none;
     font-weight: 500;
@@ -113,22 +119,27 @@ nav a:hover {
 }
 
 /* Modern card styles */
-.card, .form-container, .feature-card, .product-card {
+.card,
+.form-container,
+.feature-card,
+.product-card {
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 20px;
     padding: 24px;
-    box-shadow: 
+    box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.08),
         inset 0 1px 0 rgba(255, 255, 255, 0.5);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.card:hover, .feature-card:hover, .product-card:hover {
+.card:hover,
+.feature-card:hover,
+.product-card:hover {
     transform: translateY(-6px);
-    box-shadow: 
+    box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.12),
         0 0 0 1px rgba(52, 152, 219, 0.1);
 }
@@ -295,12 +306,15 @@ footer {
         grid-template-columns: 1fr;
         gap: 20px;
     }
-    
-    .card, .form-container, .feature-card, .product-card {
+
+    .card,
+    .form-container,
+    .feature-card,
+    .product-card {
         padding: 20px;
         border-radius: 16px;
     }
-    
+
     nav .nav-container {
         flex-direction: column;
         gap: 10px;

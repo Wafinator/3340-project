@@ -151,18 +151,20 @@ The website includes comprehensive help documentation:
 - **Frameworks**: Pure PHP (no external frameworks)
 
 ### Database Tables
-- `users` - User accounts and authentication
-- `products` - Product catalog
-- `orders` - Customer orders
+- `users` - User accounts and authentication (add `is_admin` TINYINT(1), `is_active` TINYINT(1) DEFAULT 1)
+- `products` - Product catalog (ensure `brand`, `image`, `featured`, `created_at` columns)
+- `orders` - Customer orders (include `user_id` NULLABLE, `total_amount`, `status`, `shipping_address`, `created_at`)
 - `order_items` - Individual items in orders
 - `contact_messages` - Contact form submissions
 - `system_status` - System monitoring data
+- `product_reviews` - Product ratings and reviews (product_id, reviewer, rating INT 1-5, review_text, created_at)
 
 ### Key Features
 - **Responsive Design**: Mobile-first approach
 - **SEO Optimized**: Meta tags, structured data
 - **Security**: Password hashing, SQL injection prevention
 - **Performance**: Optimized queries and caching
+- **Shopping Cart & Checkout**: Session-based cart with order creation
 
 ## Live Demo
 

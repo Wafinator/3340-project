@@ -17,6 +17,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password_hash'])) {
+            // Block disabled users (if column exists)
+            if (isset($user['is_active']) && (int)$user['is_active'] === 0) {
+                $error_message = "Your account is disabled. Please contact support.";
+            } else {
             // Successful login
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
@@ -29,6 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location: ../index.php");
             }
             exit;
+            }
         } else {
             $error_message = "Invalid username or password.";
         }
