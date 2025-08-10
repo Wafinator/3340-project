@@ -251,7 +251,7 @@ if ($brand_column_exists) {
     </div>
 </div>
 
-<style>
+ <!-- styles moved to assets/css/pages.css -->
 .products-hero {
     text-align: center;
     padding: 80px 0;
@@ -709,7 +709,7 @@ if ($brand_column_exists) {
         justify-content: center;
     }
 }
-</style>
+ 
 
 <script>
 // View switching

@@ -125,7 +125,7 @@ include 'includes/header.php';
     </section>
 </div>
 
-<style>
+ <!-- styles moved to assets/css/pages.css -->
 .hero {
     text-align: center;
     padding: 60px 0;
@@ -263,6 +263,6 @@ include 'includes/header.php';
         grid-template-columns: 1fr;
     }
 }
-</style>
+ 
 
 <?php include 'includes/footer.php'; ?>

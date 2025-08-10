@@ -329,7 +329,7 @@ try {
     </div>
 </div>
 
-<style>
+ <!-- styles moved to assets/css/pages.css -->
 .breadcrumb {
     margin-bottom: 30px;
     padding: 15px 0;
@@ -752,7 +752,7 @@ try {
         grid-template-columns: 1fr;
     }
 }
-</style>
+ 
 
 <script>
 // Tab switching
