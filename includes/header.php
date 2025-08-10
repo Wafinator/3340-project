@@ -1,4 +1,8 @@
 <?php
+/**
+ * Shared site header: meta, SEO, theme, global nav.
+ * Computes a relative $prefix so assets and links work from nested directories.
+ */
 session_start();
 $current_theme = $_SESSION['theme'] ?? 'dark';
 

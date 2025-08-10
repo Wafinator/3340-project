@@ -1,4 +1,15 @@
 <?php
+/**
+ * File: includes/auth.php
+ * Purpose: Lightweight session-based authentication/authorization helpers.
+ * Functions:
+ *  - is_logged_in(): bool
+ *  - current_user_id(): ?int
+ *  - current_username(): ?string
+ *  - is_admin(): bool
+ *  - require_login(): void (redirects to /user/login.php)
+ *  - require_admin(): void (redirects to /user/login.php)
+ */
 // Authentication and authorization helpers
 
 if (session_status() === PHP_SESSION_NONE) {

@@ -54,7 +54,7 @@
         </div>
     </footer>
     
-    <!-- Theme Switcher JavaScript -->
+    <!-- Theme and mobile nav handlers (kept minimal; main app JS in assets/js/main.js) -->
     <script>
         function changeTheme(theme) {
             // Send AJAX request to update theme

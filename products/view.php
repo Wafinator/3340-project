@@ -1,4 +1,11 @@
 <?php 
+/**
+ * Page: products/view.php
+ * Purpose: Product detail page with add-to-cart and simple reviews.
+ * Notes:
+ *  - Reviews gracefully no-op if 'product_reviews' table is missing.
+ *  - Adds to a session-based cart; checkout creates orders.
+ */
 $page_title = "Product Details";
 require_once '../includes/db.php';
 include '../includes/header.php'; 
