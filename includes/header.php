@@ -53,6 +53,8 @@ if (!file_exists('assets/js/main.js')) {
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<?php echo $prefix; ?>assets/css/custom.css">
+    <!-- Consolidated page styles -->
+    <link rel="stylesheet" href="<?php echo $prefix; ?>assets/css/pages.css">
     
     <!-- JavaScript -->
     <script src="<?php echo $prefix; ?>assets/js/main.js" defer></script>

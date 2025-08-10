@@ -54,41 +54,6 @@
         </div>
     </footer>
     
-    <!-- Theme and mobile nav handlers (kept minimal; main app JS in assets/js/main.js) -->
-    <script>
-        function changeTheme(theme) {
-            // Send AJAX request to update theme
-            fetch('<?php echo $prefix; ?>user/update-theme.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'theme=' + theme
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Reload page to apply new theme
-                    window.location.reload();
-                }
-            })
-            .catch(error => {
-                console.error('Error changing theme:', error);
-            });
-        }
-        
-        // Mobile menu toggle
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileToggle = document.querySelector('.mobile-menu-toggle');
-            const navLinks = document.querySelector('.nav-links');
-            
-            if (mobileToggle && navLinks) {
-                mobileToggle.addEventListener('click', function() {
-                    navLinks.classList.toggle('active');
-                    mobileToggle.classList.toggle('active');
-                });
-            }
-        });
-    </script>
+    <!-- App scripts are loaded via assets/js/main.js -->
 </body>
 </html>
