@@ -1,5 +1,13 @@
 <?php
-// db.php - Handles MySQL connection
+/**
+ * File: includes/db.php
+ * Purpose: Create and expose a PDO MySQL connection used across the site.
+ * Usage: require_once 'includes/db.php'; then use $pdo for queries.
+ * Notes:
+ *  - Set credentials for your myweb host.
+ *  - The connection uses UTF-8 and throws exceptions on errors.
+ */
+// Handles MySQL connection
 $host = 'localhost';      // Change if different
 $db   = 'hassan95_3340_project';       // Your MySQL DB name
 $user = 'hassan95_3340_project';  // DB username

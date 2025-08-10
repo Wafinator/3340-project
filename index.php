@@ -1,4 +1,9 @@
 <?php 
+/**
+ * Page: index.php
+ * Purpose: Homepage with hero, features, featured products, and testimonials.
+ * Robustness: handles missing 'featured' or 'created_at' columns for products.
+ */
 $page_title = "Home";
 include 'includes/header.php'; 
 ?>
@@ -43,11 +48,23 @@ include 'includes/header.php';
         <h2>Featured Products</h2>
         <div class="product-grid">
             <?php
-            // Get featured products from database
+            // Get featured products with robust fallback for older schemas
             require_once 'includes/db.php';
-            $stmt = $pdo->query("SELECT * FROM products WHERE featured = 1 LIMIT 6");
-            $featured_products = $stmt->fetchAll();
-            
+            $featured_products = [];
+            try {
+                $stmt = $pdo->query("SELECT * FROM products WHERE featured = 1 LIMIT 6");
+                $featured_products = $stmt->fetchAll();
+            } catch (Throwable $e) {
+                try {
+                    // Fallback if 'featured' or 'created_at' doesn't exist
+                    $stmt = $pdo->query("SELECT * FROM products ORDER BY created_at DESC LIMIT 6");
+                    $featured_products = $stmt->fetchAll();
+                } catch (Throwable $e2) {
+                    // Last resort: just pick any 6
+                    $stmt = $pdo->query("SELECT * FROM products LIMIT 6");
+                    $featured_products = $stmt->fetchAll();
+                }
+            }
             foreach ($featured_products as $product):
             ?>
             <div class="product-card" data-category="<?php echo htmlspecialchars($product['category']); ?>">

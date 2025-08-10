@@ -1,4 +1,11 @@
 <?php
+/**
+ * Page: products/index.php
+ * Purpose: Product catalog with filters (category, price, search, optional brand)
+ * Behavior:
+ *  - Detects if 'brand' column exists; only uses brand filter/sort if present
+ *  - Paginates client-side (CSS grid) and keeps UI responsive
+ */
 $page_title = "Browse Products";
 require_once '../includes/db.php';
 include '../includes/header.php'; 
@@ -11,6 +18,15 @@ $price_max = $_GET['price_max'] ?? '';
 $search = $_GET['search'] ?? '';
 $sort = $_GET['sort'] ?? 'name';
 
+// Detect if the 'brand' column exists to avoid SQL errors on older schemas
+$brand_column_exists = false;
+try {
+    $checkBrand = $pdo->query("SHOW COLUMNS FROM products LIKE 'brand'");
+    $brand_column_exists = (bool)$checkBrand->fetch();
+} catch (Throwable $e) {
+    $brand_column_exists = false;
+}
+
 // Build the SQL query with filters
 $sql = "SELECT * FROM products WHERE 1=1";
 $params = [];
@@ -20,7 +36,7 @@ if ($category_filter) {
     $params[] = $category_filter;
 }
 
-if ($brand_filter) {
+if ($brand_column_exists && $brand_filter) {
     $sql .= " AND brand = ?";
     $params[] = $brand_filter;
 }
@@ -51,6 +67,11 @@ switch ($sort) {
         $sql .= " ORDER BY price DESC";
         break;
     case 'brand':
+        if ($brand_column_exists) {
+            $sql .= " ORDER BY brand ASC";
+            break;
+        }
+        // fall-through to default if brand column missing
     default:
         $sql .= " ORDER BY name ASC";
 }
@@ -61,7 +82,15 @@ $products = $stmt->fetchAll();
 
 // Get unique categories and brands for filters
 $categories = $pdo->query("SELECT DISTINCT category FROM products ORDER BY category")->fetchAll();
-$brands = $pdo->query("SELECT DISTINCT brand FROM products WHERE brand IS NOT NULL AND brand <> '' ORDER BY brand")->fetchAll();
+if ($brand_column_exists) {
+    try {
+        $brands = $pdo->query("SELECT DISTINCT brand FROM products WHERE brand IS NOT NULL AND brand <> '' ORDER BY brand")->fetchAll();
+    } catch (Throwable $e) {
+        $brands = [];
+    }
+} else {
+    $brands = [];
+}
 ?>
 
 <div class="container">
@@ -98,7 +127,8 @@ $brands = $pdo->query("SELECT DISTINCT brand FROM products WHERE brand IS NOT NU
                         </select>
                     </div>
 
-                    <!-- Brand Filter -->
+                    <!-- Brand Filter (shown only if column exists) -->
+                    <?php if ($brand_column_exists): ?>
                     <div class="filter-group">
                         <label for="brand">Brand</label>
                         <select id="brand" name="brand">
@@ -110,6 +140,7 @@ $brands = $pdo->query("SELECT DISTINCT brand FROM products WHERE brand IS NOT NU
                             <?php endforeach; ?>
                         </select>
                     </div>
+                    <?php endif; ?>
 
                     <!-- Price Range -->
                     <div class="filter-group">
@@ -196,7 +227,9 @@ $brands = $pdo->query("SELECT DISTINCT brand FROM products WHERE brand IS NOT NU
                             <div class="product-info">
                                 <div class="product-category"><?= htmlspecialchars($product['category']) ?></div>
                                 <h3 class="product-title"><?= htmlspecialchars($product['name']) ?></h3>
-                                <div class="product-brand"><?= htmlspecialchars($product['brand']) ?></div>
+                          <?php if ($brand_column_exists && isset($product['brand'])): ?>
+                          <div class="product-brand"><?= htmlspecialchars($product['brand']) ?></div>
+                          <?php endif; ?>
                                 <p class="product-description"><?= htmlspecialchars(substr($product['description'], 0, 100)) ?>...</p>
                                 <div class="product-price">$<?= number_format($product['price'], 2) ?></div>
                                 

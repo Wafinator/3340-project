@@ -1,4 +1,8 @@
 // Main JavaScript for WafiTechParts
+// Responsibilities:
+//  - Mobile nav toggle, theme switcher glue
+//  - Client-side validation and build calculator helpers
+//  - Minor UI sugar (alerts, debounce)
 
 document.addEventListener('DOMContentLoaded', function () {
     // Initialize all components
