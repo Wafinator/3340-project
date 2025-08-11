@@ -24,49 +24,6 @@ A dynamic e-commerce website for computer parts and custom PC building, built wi
 - **Contact Forms**: Interactive forms with validation
 - **Order Management**: Complete order tracking system
 
-## Project Structure
-
-```
-3340-project/
-├── admin/                 # Admin panel files
-│   ├── dashboard.php     # Admin dashboard
-│   ├── manage-products.php # Product management
-│   ├── manage-users.php  # User management
-│   └── settings.php      # System settings
-├── assets/               # Static assets
-│   ├── css/             # Custom CSS files
-│   ├── js/              # JavaScript files
-│   └── images/          # Image files
-├── includes/             # PHP includes
-│   ├── header.php       # Site header
-│   ├── footer.php       # Site footer
-│   └── db.php          # Database connection
-├── products/            # Product pages
-│   ├── index.php       # Product listing
-│   └── build-calculator.php # PC build calculator
-├── templates/           # CSS themes
-│   ├── dark.css        # Dark theme
-│   ├── light.css       # Light theme
-│   └── gamer.css       # Gamer theme
-├── user/               # User account pages
-│   ├── login.php       # User login
-│   ├── register.php    # User registration
-│   ├── profile.php     # User profile
-│   └── orders.php      # Order history
-├── wiki/               # Help documentation
-│   ├── index.php       # Wiki home
-│   ├── faq.php        # Frequently asked questions
-│   ├── how-to-build.php # PC building guide
-│   └── how-to-buy.php  # Component buying guide
-├── index.php           # Home page
-├── about.php           # About page
-├── contact.php         # Contact page
-├── contact-process.php # Contact form processing
-├── check-database.php  # Database verification tool
-├── database_setup.sql  # Database schema and sample data
-├── generate_assets.php # Asset management script
-└── installation_guide.md # Detailed installation guide
-```
 
 ## Quick Start
 
@@ -181,4 +138,4 @@ This project is created for educational purposes as part of a university course 
 **Created by**: Wafi Hassan  
 **Course**: COMP-3340 Web Technologies  
 **Institution**: University of Windsor  
-**Date**: July 2025 
+**Date**: August 2025 
