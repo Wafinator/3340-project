@@ -24,47 +24,6 @@ A dynamic e-commerce website for computer parts and custom PC building, built wi
 - **Contact Forms**: Interactive forms with validation
 - **Order Management**: Complete order tracking system
 
-
-## Quick Start
-
-### Prerequisites
-- PHP 7.4 or higher
-- MySQL 5.7 or higher
-- Web server (Apache/Nginx)
-
-### Installation
-
-1. **Clone or download the project**
-   ```bash
-   git clone https://github.com/yourusername/wafitechparts.git
-   cd wafitechparts
-   ```
-
-2. **Set up the database**
-   - Create a MySQL database
-   - Import the database schema:
-   ```bash
-   mysql -u your_username -p your_database < database_setup.sql
-   ```
-
-3. **Configure database connection**
-   - Edit `includes/db.php` with your database credentials
-   - Update the connection parameters:
-   ```php
-   $host = 'localhost';
-   $db   = 'your_database_name';
-   $user = 'your_username';
-   $pass = 'your_password';
-   ```
-
-4. **Upload to your web server**
-   - Upload all files to your web server directory
-   - Ensure proper file permissions
-
-5. **Test the installation**
-   - Visit your website URL
-   - Run the database checker: `your-domain.com/check-database.php`
-
 ## Themes
 
 The website includes three different themes:
